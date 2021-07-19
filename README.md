@@ -5,6 +5,7 @@ Projeto TCC - API
 Criar usuário: 
 
 POST: https://api-estock.herokuapp.com/api/usuarios
+
 Body:
 
 {
