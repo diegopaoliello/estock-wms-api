@@ -1,14 +1,17 @@
 # estock-wms-api
 
-Projeto TCC - API
+# **Projeto TCC - API**
 
-Criar usuário: 
+- Criar usuário: 
 
-POST: https://api-estock.herokuapp.com/api/usuarios
+**Tipo:** POST 
+https://api-estock.herokuapp.com/api/usuarios
 
-Body:
+**Body**:
 
+```json
 {
     "username": "user",
     "password": 123
 }
+````
