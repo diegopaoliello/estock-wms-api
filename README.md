@@ -7,7 +7,7 @@
 **Tipo:** POST 
 https://api-estock.herokuapp.com/api/usuarios
 
-**Body**:
+**Body**: JSON
 
 ```json
 {
@@ -25,3 +25,9 @@ https://api-estock.herokuapp.com/api/oauth/token
 
 1. **User:** my-angular-app
 2. **Password:** @321
+
+**Body**: x-www-form-urlencoded
+
+1. **username:** user
+2. **password:** 123
+3. **grant_type:** password
