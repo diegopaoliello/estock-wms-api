@@ -15,3 +15,13 @@ https://api-estock.herokuapp.com/api/usuarios
     "password": 123
 }
 ````
+
+**Autenticação (TOKEN)**
+
+**Tipo:** POST 
+https://api-estock.herokuapp.com/api/oauth/token
+
+**Authorization**
+
+1. **User:** my-angular-app
+2. **Password:** @321
