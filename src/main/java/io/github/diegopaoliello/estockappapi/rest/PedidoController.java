@@ -4,27 +4,19 @@ import io.github.diegopaoliello.estockappapi.model.entity.Cliente;
 import io.github.diegopaoliello.estockappapi.model.entity.ItemPedido;
 import io.github.diegopaoliello.estockappapi.model.entity.Pedido;
 import io.github.diegopaoliello.estockappapi.model.entity.Produto;
-import io.github.diegopaoliello.estockappapi.model.entity.ServicoPrestado;
 import io.github.diegopaoliello.estockappapi.model.repository.ClienteRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.ItemPedidoRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.PedidoRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.ProdutoRepository;
 import io.github.diegopaoliello.estockappapi.rest.dto.PedidoDTO;
-import io.github.diegopaoliello.estockappapi.rest.dto.ServicoPrestadoDTO;
-import io.github.diegopaoliello.estockappapi.service.PedidoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 
-import java.net.URI;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -32,16 +24,14 @@ import java.util.List;
 public class PedidoController {
 
 	private final PedidoRepository repository;
-	private final PedidoService service;
 	private final ClienteRepository clienteRepository;
 	private ItemPedidoRepository itemPedidoRepository;
 	private ProdutoRepository produtoRepository;
 
 	@Autowired
-	public PedidoController(PedidoRepository repository, PedidoService service, ClienteRepository clienteRepository,
+	public PedidoController(PedidoRepository repository, ClienteRepository clienteRepository,
 			ItemPedidoRepository itemPedidoRepository, ProdutoRepository produtoRepository) {
 		this.repository = repository;
-		this.service = service;
 		this.clienteRepository = clienteRepository;
 		this.itemPedidoRepository = itemPedidoRepository;
 		this.produtoRepository = produtoRepository;
