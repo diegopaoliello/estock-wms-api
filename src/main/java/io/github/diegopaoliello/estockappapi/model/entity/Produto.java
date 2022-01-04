@@ -37,18 +37,16 @@ public class Produto implements Serializable {
 	@NotEmpty(message = "{campo.codigo.obrigatorio}")
 	private String codigo;
 
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "id_produto_categoria")
+	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
 
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "id_produto_unidade_medida")
+	@JoinColumn(name = "id_unidade_medida")
 	private UnidadeMedida unidadeMedida;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "id.produto")
+	@OneToMany(mappedBy = "produto")
 	private Set<ItemPedido> itens = new HashSet<>();
 
 	@Column(nullable = false, name = "data_cadastro", updatable = false)

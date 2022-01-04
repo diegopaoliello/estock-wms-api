@@ -11,8 +11,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,8 +30,8 @@ public class Pedido implements Serializable {
 	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 
-	@OneToMany(mappedBy = "id.pedido")
-	private Set<ItemPedido> itens = new HashSet<>();
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ItemPedido> itens;
 
 	@Column(nullable = false, name = "data_cadastro", updatable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy:HH:mm")

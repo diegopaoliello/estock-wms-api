@@ -8,7 +8,6 @@ import io.github.diegopaoliello.estockappapi.model.repository.ClienteRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.ItemPedidoRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.PedidoRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.ProdutoRepository;
-import io.github.diegopaoliello.estockappapi.rest.dto.PedidoDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,8 +43,8 @@ public class PedidoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Pedido salvar(@RequestBody @Valid PedidoDTO dto) {
-		Integer idCliente = dto.getIdCliente();
+	public Pedido salvar(@RequestBody @Valid Pedido dto) {
+		Integer idCliente = dto.getCliente().getId();
 
 		Cliente cliente = clienteRepository.findById(idCliente)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente inexistente."));
