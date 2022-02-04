@@ -2,7 +2,6 @@ package io.github.diegopaoliello.estockappapi.rest;
 
 import io.github.diegopaoliello.estockappapi.exception.UsuarioCadastradoException;
 import io.github.diegopaoliello.estockappapi.model.entity.Usuario;
-import io.github.diegopaoliello.estockappapi.model.repository.UsuarioRepository;
 import io.github.diegopaoliello.estockappapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,5 +25,11 @@ public class UsuarioController {
 		} catch (UsuarioCadastradoException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+	}
+
+	@GetMapping
+	public Usuario findByUsername(@RequestParam(value = "username", required = false, defaultValue = "") String username) {
+
+		return service.findByUsername(username);
 	}
 }
