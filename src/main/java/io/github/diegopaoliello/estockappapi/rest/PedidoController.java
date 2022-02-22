@@ -1,13 +1,9 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
-import io.github.diegopaoliello.estockappapi.model.entity.Cliente;
-import io.github.diegopaoliello.estockappapi.model.entity.ItemPedido;
+import io.github.diegopaoliello.estockappapi.model.entity.PedidoStatus;
 import io.github.diegopaoliello.estockappapi.model.entity.Pedido;
-import io.github.diegopaoliello.estockappapi.model.entity.Produto;
-import io.github.diegopaoliello.estockappapi.model.repository.ClienteRepository;
-import io.github.diegopaoliello.estockappapi.model.repository.ItemPedidoRepository;
-import io.github.diegopaoliello.estockappapi.model.repository.PedidoRepository;
-import io.github.diegopaoliello.estockappapi.model.repository.ProdutoRepository;
+import io.github.diegopaoliello.estockappapi.rest.dto.PedidoDTO;
+import io.github.diegopaoliello.estockappapi.service.PedidoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,78 +15,91 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pedido")
+@RequestMapping("/pedidos")
 public class PedidoController {
 
-	private final PedidoRepository repository;
-	private final ClienteRepository clienteRepository;
-	private ItemPedidoRepository itemPedidoRepository;
-	private ProdutoRepository produtoRepository;
-
 	@Autowired
-	public PedidoController(PedidoRepository repository, ClienteRepository clienteRepository,
-			ItemPedidoRepository itemPedidoRepository, ProdutoRepository produtoRepository) {
-		this.repository = repository;
-		this.clienteRepository = clienteRepository;
-		this.itemPedidoRepository = itemPedidoRepository;
-		this.produtoRepository = produtoRepository;
-	}
-
-	@GetMapping
-	public List<Pedido> obterTodos() {
-		return repository.findAll();
-	}
+	private PedidoService service;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Pedido salvar(@RequestBody @Valid Pedido dto) {
-		Integer idCliente = dto.getCliente().getId();
-
-		Cliente cliente = clienteRepository.findById(idCliente)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente inexistente."));
-
+	public Pedido salvar(@RequestBody @Valid PedidoDTO pedidoDto) {
 		Pedido pedido = new Pedido();
-		pedido.setCliente(cliente);
 
-		pedido = repository.save(pedido);
+		try {
+			pedido.setFornecedor(pedidoDto.getFornecedor());
 
-		for (ItemPedido ip : dto.getItens()) {
-			Produto produto = produtoRepository.findById(ip.getProduto().getId())
-					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
-			ip.setPedido(pedido);
-			ip.setProduto(produto);
+			service.salvar(pedido);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-
-		itemPedidoRepository.saveAll(dto.getItens());
-		pedido.setItens(dto.getItens());
 
 		return pedido;
 	}
 
-	@GetMapping("{id}")
-	public Pedido acharPorId(@PathVariable Integer id) {
-		return repository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+	@PutMapping("{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void atualizar(@PathVariable Integer id, @RequestBody @Valid PedidoDTO pedidoAtualizado) {
+		try {
+			Pedido pedido = new Pedido();
+
+			pedido.setFornecedor(pedidoAtualizado.getFornecedor());
+
+			service.atualizar(id, pedido);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletar(@PathVariable Integer id) {
-		repository.findById(id).map(pedido -> {
-			repository.delete(pedido);
-			return Void.TYPE;
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+		try {
+			service.deletar(id);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
-//	@PutMapping("{id}")
-//	@ResponseStatus(HttpStatus.NO_CONTENT)
-//	public void atualizar(@PathVariable Integer id, @RequestBody @Valid Pedido produtoNew) {
-//		repository.findById(id).map(produtoOld -> {
-//			produtoOld.setCategoria(produtoNew.getCategoria());
-//			produtoOld.setCodigo(produtoNew.getCodigo());
-//			produtoOld.setDescricao(produtoNew.getDescricao());
-//			produtoOld.setUnidadeMedida(produtoNew.getUnidadeMedida());
-//			return repository.save(produtoOld);
-//		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
-//	}
+	@GetMapping("{id}")
+	public Pedido acharPorId(@PathVariable Integer id) {
+		try {
+			service.acharPorId(id);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+
+		return service.acharPorId(id);
+	}
+
+	@GetMapping
+	public List<Pedido> listar() {
+		return service.listar();
+	}
+
+	@PatchMapping("{id}/aprovar")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void aprovar(@PathVariable Integer id) {
+		try {
+			service.atualizarStatus(id, PedidoStatus.APROVADO);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@PatchMapping("{id}/reprovar")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void reprovar(@PathVariable Integer id) {
+		try {
+			service.atualizarStatus(id, PedidoStatus.APROVADO);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@PatchMapping("{id}/concluir")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void concluir(@PathVariable Integer id) {
+		service.atualizarStatus(id, PedidoStatus.CONCLUIDO);
+	}
 }

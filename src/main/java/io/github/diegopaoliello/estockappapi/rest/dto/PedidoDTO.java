@@ -3,21 +3,17 @@ package io.github.diegopaoliello.estockappapi.rest.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import io.github.diegopaoliello.estockappapi.model.entity.ItemPedido;
+import io.github.diegopaoliello.estockappapi.model.entity.Fornecedor;
+import io.github.diegopaoliello.estockappapi.model.entity.PedidoItem;
 
 @Data
 @NoArgsConstructor
 public class PedidoDTO {
+	private Fornecedor fornecedor;
 
-	@NotNull(message = "{campo.cliente.obrigatorio}")
-	private Integer idCliente;
-	
-	private Set<ItemPedido> itens = new HashSet<>();
-
+	private List<PedidoItem> itens;
 }

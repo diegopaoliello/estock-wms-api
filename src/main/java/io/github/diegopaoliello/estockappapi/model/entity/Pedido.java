@@ -1,44 +1,26 @@
 package io.github.diegopaoliello.estockappapi.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class Pedido implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@GenericGenerator(name = "increment", strategy = "increment")
-	private Integer id;
+public class Pedido extends AbstractEntity {
+	@Enumerated(value = EnumType.STRING)
+	@Column(nullable = false, length = 50)
+	@NotNull(message = "{campo.status.obrigatorio}")
+	private PedidoStatus status;
 
 	@ManyToOne
-	@JoinColumn(name = "id_cliente")
-	private Cliente cliente;
-
-	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ItemPedido> itens;
-
-	@Column(nullable = false, name = "data_cadastro", updatable = false)
-	@JsonFormat(pattern = "dd/MM/yyyy:HH:mm")
-	private LocalDateTime dataCadastro;
-
-	@PrePersist
-	public void beforeSave() {
-		setDataCadastro(LocalDateTime.now());
-	}
+	@NotNull(message = "{campo.fornecedor.obrigatorio}")
+	@JoinColumn(name = "id_fornecedor", foreignKey = @ForeignKey(name = "pedido_fornecedor_fk"))
+	private Fornecedor fornecedor;
 }

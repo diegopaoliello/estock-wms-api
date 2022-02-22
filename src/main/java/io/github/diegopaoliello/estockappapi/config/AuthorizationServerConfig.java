@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
@@ -18,40 +17,33 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
 	@Value("${security.oauth2.resource.jwt.key-value}")
-    private String signingKey;
+	private String signingKey;
 
-    @Bean
-    public TokenStore tokenStore(){
-        return new JwtTokenStore(accessTokenConverter());
-    }
+	@Bean
+	public TokenStore tokenStore() {
+		return new JwtTokenStore(accessTokenConverter());
+	}
 
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter(){
-        JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-        tokenConverter.setSigningKey(signingKey);
-        return tokenConverter;
-    }
+	@Bean
+	public JwtAccessTokenConverter accessTokenConverter() {
+		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
+		tokenConverter.setSigningKey(signingKey);
+		return tokenConverter;
+	}
 
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints
-            .tokenStore(tokenStore())
-            .accessTokenConverter(accessTokenConverter())
-            .authenticationManager(authenticationManager);
-    }
+	@Override
+	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		endpoints.tokenStore(tokenStore()).accessTokenConverter(accessTokenConverter())
+				.authenticationManager(authenticationManager);
+	}
 
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients
-            .inMemory()
-            .withClient("my-angular-app")
-            .secret("@321")
-            .scopes("read", "write")
-            .authorizedGrantTypes("password")
-            .accessTokenValiditySeconds(1800);
-    }
+	@Override
+	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+		clients.inMemory().withClient("my-angular-app").secret("@321").scopes("read", "write")
+				.authorizedGrantTypes("password").accessTokenValiditySeconds(1800);
+	}
 }

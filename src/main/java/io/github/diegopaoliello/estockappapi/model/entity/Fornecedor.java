@@ -1,30 +1,20 @@
 package io.github.diegopaoliello.estockappapi.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.br.CNPJ;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-
-public class Fornecedor {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@GenericGenerator(name = "increment", strategy = "increment")
-	private Integer id;
-
+public class Fornecedor extends AbstractEntity {
 	@Column(nullable = false, length = 500)
 	@NotEmpty(message = "{campo.razao_social.obrigatorio}")
 	private String razaoSocial;
@@ -36,24 +26,4 @@ public class Fornecedor {
 	@NotNull(message = "{campo.cnpj.obrigatorio}")
 	@CNPJ(message = "{campo.cnpj.invalido}")
 	private String cnpj;
-
-	@Column(nullable = false, name = "data_cadastro", updatable = false)
-	@JsonFormat(pattern = "dd/MM/yyyy:HH:mm")
-	private LocalDateTime dataCadastro;
-
-	@Column(nullable = false, name = "data_atualizacao")
-	@JsonFormat(pattern = "dd/MM/yyyy:HH:mm")
-	private LocalDateTime dataAtualizacao;
-
-	@PrePersist
-	public void beforeSave() {
-		setDataCadastro(LocalDateTime.now());
-		setDataAtualizacao(LocalDateTime.now());
-	}
-
-	@PreUpdate
-	public void beforeUpdate() {
-		setDataAtualizacao(LocalDateTime.now());
-	}
-
 }

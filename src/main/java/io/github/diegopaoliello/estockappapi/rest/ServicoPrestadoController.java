@@ -7,17 +7,14 @@ import io.github.diegopaoliello.estockappapi.model.repository.ServicoPrestadoRep
 import io.github.diegopaoliello.estockappapi.rest.dto.ServicoPrestadoDTO;
 import io.github.diegopaoliello.estockappapi.util.BigDecimalConverter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/servicos-prestados")

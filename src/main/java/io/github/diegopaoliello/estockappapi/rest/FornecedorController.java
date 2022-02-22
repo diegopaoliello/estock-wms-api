@@ -2,6 +2,7 @@ package io.github.diegopaoliello.estockappapi.rest;
 
 import io.github.diegopaoliello.estockappapi.model.entity.Fornecedor;
 import io.github.diegopaoliello.estockappapi.model.repository.FornecedorRepository;
+import io.github.diegopaoliello.estockappapi.service.FornecedorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,50 +13,37 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/fornecedor")
+@RequestMapping("/fornecedores")
 public class FornecedorController {
 
-	private final FornecedorRepository repository;
-
 	@Autowired
-	public FornecedorController(FornecedorRepository repository) {
-		this.repository = repository;
-	}
+	private FornecedorService service;
 
 	@GetMapping
-	public List<Fornecedor> obterTodos() {
-		return repository.findAll();
+	public List<Fornecedor> listar() {
+		return service.listar();
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Fornecedor salvar(@RequestBody @Valid Fornecedor fornecedor) {
-		return repository.save(fornecedor);
+		return service.salvar(fornecedor);
 	}
 
 	@GetMapping("{id}")
 	public Fornecedor acharPorId(@PathVariable Integer id) {
-		return repository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fornecedor não encontrado"));
+		return service.acharPorId(id);
 	}
 
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletar(@PathVariable Integer id) {
-		repository.findById(id).map(fornecedor -> {
-			repository.delete(fornecedor);
-			return Void.TYPE;
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fornecedor não encontrado"));
+		service.deletar(id);
 	}
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void atualizar(@PathVariable Integer id, @RequestBody @Valid Fornecedor fornecedorNew) {
-		repository.findById(id).map(fornecedorOld -> {
-			fornecedorOld.setRazaoSocial(fornecedorNew.getRazaoSocial());
-			fornecedorOld.setNomeFantasia(fornecedorNew.getNomeFantasia());
-			fornecedorOld.setCnpj(fornecedorNew.getCnpj());
-			return repository.save(fornecedorOld);
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fornecedor não encontrado"));
+		service.atualizar(id, fornecedorNew);
 	}
 }
