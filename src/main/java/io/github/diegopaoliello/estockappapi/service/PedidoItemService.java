@@ -9,5 +9,6 @@ import org.springframework.stereotype.Service;
 public class PedidoItemService extends AbstractService<PedidoItem, PedidoItemRepository> {
 	public PedidoItemService() {
 		super(PedidoItem.class);
+		/**/
 	}
 }
