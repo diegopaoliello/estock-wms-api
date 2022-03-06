@@ -1,13 +1,11 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
 import io.github.diegopaoliello.estockappapi.model.entity.Fornecedor;
-import io.github.diegopaoliello.estockappapi.model.repository.FornecedorRepository;
 import io.github.diegopaoliello.estockappapi.service.FornecedorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
