@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pedidos/{id}/itens")
+@RequestMapping("/pedidos/{id}/itens-pedido")
 public class PedidoItemController {
 
 	@Autowired

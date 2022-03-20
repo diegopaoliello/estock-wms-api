@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -23,10 +24,12 @@ public class Produto extends AbstractEntity {
 	private String codigo;
 
 	@ManyToOne
+	@NotNull(message = "{campo.categoria.obrigatorio}")
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
 
 	@ManyToOne
+	@NotNull(message = "{campo.unidade_medida.obrigatorio")
 	@JoinColumn(name = "id_unidade_medida")
 	private UnidadeMedida unidadeMedida;
 }

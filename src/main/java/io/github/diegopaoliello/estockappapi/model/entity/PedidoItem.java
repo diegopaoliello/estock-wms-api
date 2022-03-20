@@ -25,7 +25,6 @@ public class PedidoItem extends AbstractEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "id_pedido")
-	@JsonIgnore
 	Pedido pedido;
 
 	@ManyToOne
