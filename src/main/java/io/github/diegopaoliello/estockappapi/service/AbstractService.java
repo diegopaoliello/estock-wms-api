@@ -29,6 +29,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends JpaRep
 	public void atualizar(Integer id, T entityAtualizado) {
 		repository.findById(id).map(entity -> {
 			entity = entityAtualizado;
+			entity.setId(id);
 			return repository.save(entity);
 		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
 				this.entityClass.getSimpleName() + " não encontrado"));

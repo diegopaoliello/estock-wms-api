@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pedidos/{id}/itens-pedido")
+@RequestMapping("/pedidos/{idPedido}/itens-pedido")
 public class PedidoItemController {
 
 	@Autowired
@@ -42,7 +42,7 @@ public class PedidoItemController {
 	}
 
 	@GetMapping
-	public List<PedidoItem> listar() {
-		return service.listar();
+	public List<PedidoItem> listar(@RequestParam(value = "idPedido", required = false) Integer idPedido) {
+		return service.listar(idPedido);
 	}
 }

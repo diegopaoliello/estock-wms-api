@@ -27,7 +27,7 @@ public class ProdutoController {
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void atualizar(@PathVariable Integer id, @RequestBody @Valid Produto produto) {
-		service.salvar(produto);
+		service.atualizar(id, produto);
 	}
 
 	@DeleteMapping("{id}")
