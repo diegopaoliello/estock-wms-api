@@ -15,6 +15,9 @@ public abstract class AbstractService<T extends AbstractEntity, R extends JpaRep
 	@Autowired
 	protected R repository;
 
+	@Autowired
+	private UsuarioService usuarioService;
+
 	protected Class<? extends T> entityClass;
 
 	public AbstractService(Class<? extends T> entityClass) {
@@ -22,6 +25,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends JpaRep
 	}
 
 	public T salvar(T entity) {
+		entity.setUsuario(usuarioService.findAuthenticatedUser());
 		return repository.save(entity);
 	}
 
@@ -30,6 +34,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends JpaRep
 		repository.findById(id).map(entity -> {
 			entity = entityAtualizado;
 			entity.setId(id);
+			entity.setUsuario(usuarioService.findAuthenticatedUser());
 			return repository.save(entity);
 		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
 				this.entityClass.getSimpleName() + " não encontrado"));

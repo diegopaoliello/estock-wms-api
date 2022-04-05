@@ -1,6 +1,7 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
 import io.github.diegopaoliello.estockappapi.exception.UsuarioCadastradoException;
+import io.github.diegopaoliello.estockappapi.model.entity.PedidoStatus;
 import io.github.diegopaoliello.estockappapi.model.entity.Usuario;
 import io.github.diegopaoliello.estockappapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,7 @@ public class UsuarioController {
 	}
 
 	@GetMapping
-	public Usuario findByUsername(@RequestParam(value = "username", required = false, defaultValue = "") String username) {
-
-		return service.findByUsername(username);
+	public Usuario acharUsuario() {
+		return service.findAuthenticatedUser();
 	}
 }

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "SIGLA", name = "sigla_uk"))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "sigla", name = "sigla_uk"))
 public class UnidadeMedida extends AbstractEntity {
 	@Column(nullable = false, length = 500)
 	@NotEmpty(message = "{campo.descricao.obrigatorio}")
@@ -22,5 +22,4 @@ public class UnidadeMedida extends AbstractEntity {
 	@Column(nullable = false, length = 50)
 	@NotEmpty(message = "{campo.sigla.obrigatorio}")
 	private String sigla;
-
 }

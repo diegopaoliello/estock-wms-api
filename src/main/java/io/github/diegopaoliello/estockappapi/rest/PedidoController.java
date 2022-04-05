@@ -78,27 +78,19 @@ public class PedidoController {
 	}
 
 	@PatchMapping("{id}/aprovar")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void aprovar(@PathVariable Integer id) {
-		try {
-			service.atualizarStatus(id, PedidoStatus.APROVADO);
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
+		service.atualizarStatus(id, PedidoStatus.APROVADO);
 	}
 
 	@PatchMapping("{id}/reprovar")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void reprovar(@PathVariable Integer id) {
-		try {
-			service.atualizarStatus(id, PedidoStatus.APROVADO);
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
+		service.atualizarStatus(id, PedidoStatus.REPROVADO);
 	}
 
 	@PatchMapping("{id}/concluir")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void concluir(@PathVariable Integer id) {
 		service.atualizarStatus(id, PedidoStatus.CONCLUIDO);
 	}

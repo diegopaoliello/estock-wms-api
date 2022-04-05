@@ -5,8 +5,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Data
@@ -20,7 +24,11 @@ public class Pedido extends AbstractEntity {
 	private PedidoStatus status;
 
 	@ManyToOne
-	@NotNull(message = "{campo.fornecedor.obrigatorio}")
 	@JoinColumn(name = "id_fornecedor", foreignKey = @ForeignKey(name = "pedido_fornecedor_fk"))
+	@NotNull(message = "{campo.fornecedor.obrigatorio}")
 	private Fornecedor fornecedor;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido")
+	@JsonBackReference
+	private List<PedidoItem> itens;
 }

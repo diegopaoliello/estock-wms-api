@@ -12,4 +12,24 @@ public enum PedidoStatus {
 	public String getDescricao() {
 		return this.descricao;
 	}
+
+	public String getAcao() {
+		String acao = null;
+
+		switch (this) {
+		case APROVADO:
+			acao = "aprovar";
+			break;
+		case REPROVADO:
+			acao = "reprovar";
+			break;
+		case CONCLUIDO:
+			acao = "concluir";
+			break;
+
+		default:
+			break;
+		}
+		return acao;
+	}
 }

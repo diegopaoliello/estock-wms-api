@@ -1,6 +1,7 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
 import io.github.diegopaoliello.estockappapi.model.entity.UnidadeMedida;
+import io.github.diegopaoliello.estockappapi.rest.dto.UnidadeMedidaDTO;
 import io.github.diegopaoliello.estockappapi.service.UnidadeMedidaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,23 @@ public class UnidadaMedidaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public UnidadeMedida salvar(@RequestBody @Valid UnidadeMedida unidadeMedida) {
+	public UnidadeMedida salvar(@RequestBody @Valid UnidadeMedidaDTO unidadeMedidaDTO) {
+		UnidadeMedida unidadeMedida = new UnidadeMedida();
+
+		unidadeMedida.setDescricao(unidadeMedidaDTO.getDescricao());
+		unidadeMedida.setSigla(unidadeMedidaDTO.getSigla());
+
 		return service.salvar(unidadeMedida);
 	}
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable Integer id, @RequestBody @Valid UnidadeMedida unidadeMedida) {
+	public void atualizar(@PathVariable Integer id, @RequestBody @Valid UnidadeMedidaDTO unidadeMedidaDTO) {
+		UnidadeMedida unidadeMedida = new UnidadeMedida();
+
+		unidadeMedida.setDescricao(unidadeMedidaDTO.getDescricao());
+		unidadeMedida.setSigla(unidadeMedidaDTO.getSigla());
+
 		service.atualizar(id, unidadeMedida);
 	}
 

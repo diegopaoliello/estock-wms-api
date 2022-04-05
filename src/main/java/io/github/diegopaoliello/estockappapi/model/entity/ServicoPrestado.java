@@ -30,7 +30,7 @@ public class ServicoPrestado {
 	private String descricao;
 
 	@ManyToOne
-	@JoinColumn(name = "id_cliente")
+	@JoinColumn(name = "id_cliente", foreignKey = @ForeignKey(name = "serv_prestado_cliente_fk"))
 	private Cliente cliente;
 
 	@Column

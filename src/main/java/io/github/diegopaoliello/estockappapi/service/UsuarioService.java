@@ -1,5 +1,6 @@
 package io.github.diegopaoliello.estockappapi.service;
 
+import io.github.diegopaoliello.estockappapi.exception.UsuarioAutenticadoException;
 import io.github.diegopaoliello.estockappapi.exception.UsuarioCadastradoException;
 import io.github.diegopaoliello.estockappapi.model.entity.Usuario;
 import io.github.diegopaoliello.estockappapi.model.repository.UsuarioRepository;
@@ -32,7 +33,7 @@ public class UsuarioService implements UserDetailsService {
 		Usuario usuario = repository.findByUsername(userName)
 				.orElseThrow(() -> new UsernameNotFoundException("Login não encontrado."));
 
-		return User.builder().username(usuario.getUsername()).password(usuario.getPassword()).roles("USER").build();
+		return User.builder().username(usuario.getUsername()).password(usuario.getSenha()).roles("USER").build();
 	}
 
 	public Usuario findByUsername(String userName) {
@@ -44,8 +45,15 @@ public class UsuarioService implements UserDetailsService {
 
 	public Usuario findAuthenticatedUser() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		Usuario usuario = findByUsername(userName);
 
-		return usuario;
+		try {
+			if (userName == null || userName.equals("anonymousUser")) {
+				throw new UsuarioAutenticadoException();
+			}
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		}
+
+		return findByUsername(userName);
 	}
 }

@@ -35,6 +35,7 @@ public class PedidoItemController {
 	public void deletar(@PathVariable Integer id) {
 		service.deletar(id);
 	}
+	
 
 	@GetMapping("{id}")
 	public PedidoItem acharPorId(@PathVariable Integer id) {
