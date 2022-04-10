@@ -5,9 +5,9 @@ import io.github.diegopaoliello.estockappapi.service.ClienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +19,7 @@ public class ClienteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente salvar(@RequestBody @Valid Cliente cliente) {
+	public Cliente salvar(@RequestBody @Validated Cliente cliente) {
 		return service.salvar(cliente);
 	}
 
@@ -31,7 +31,7 @@ public class ClienteController {
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable Integer id, @RequestBody @Valid Cliente cliente) {
+	public void atualizar(@PathVariable Integer id, @RequestBody @Validated Cliente cliente) {
 		service.atualizar(id, cliente);
 	}
 

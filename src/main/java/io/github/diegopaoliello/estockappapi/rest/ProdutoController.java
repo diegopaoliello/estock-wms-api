@@ -6,9 +6,9 @@ import io.github.diegopaoliello.estockappapi.service.ProdutoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,13 +20,13 @@ public class ProdutoController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Produto salvar(@RequestBody @Valid Produto produto) {
+	public Produto salvar(@RequestBody @Validated Produto produto) {
 		return service.salvar(produto);
 	}
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable Integer id, @RequestBody @Valid Produto produto) {
+	public void atualizar(@PathVariable Integer id, @RequestBody @Validated Produto produto) {
 		service.atualizar(id, produto);
 	}
 

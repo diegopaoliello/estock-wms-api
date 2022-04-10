@@ -16,7 +16,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends JpaRep
 	protected R repository;
 
 	@Autowired
-	private UsuarioService usuarioService;
+	protected UsuarioService usuarioService;
 
 	protected Class<? extends T> entityClass;
 

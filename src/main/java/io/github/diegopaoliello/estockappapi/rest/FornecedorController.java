@@ -5,9 +5,9 @@ import io.github.diegopaoliello.estockappapi.service.FornecedorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,7 +24,7 @@ public class FornecedorController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Fornecedor salvar(@RequestBody @Valid Fornecedor fornecedor) {
+	public Fornecedor salvar(@RequestBody @Validated Fornecedor fornecedor) {
 		return service.salvar(fornecedor);
 	}
 
@@ -41,7 +41,7 @@ public class FornecedorController {
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable Integer id, @RequestBody @Valid Fornecedor fornecedorNew) {
+	public void atualizar(@PathVariable Integer id, @RequestBody @Validated Fornecedor fornecedorNew) {
 		service.atualizar(id, fornecedorNew);
 	}
 }

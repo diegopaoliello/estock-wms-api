@@ -1,15 +1,13 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
 import io.github.diegopaoliello.estockappapi.exception.UsuarioCadastradoException;
-import io.github.diegopaoliello.estockappapi.model.entity.PedidoStatus;
 import io.github.diegopaoliello.estockappapi.model.entity.Usuario;
 import io.github.diegopaoliello.estockappapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -20,7 +18,7 @@ public class UsuarioController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public void salvar(@RequestBody @Valid Usuario usuario) {
+	public void salvar(@RequestBody @Validated Usuario usuario) {
 		try {
 			service.salvar(usuario);
 		} catch (UsuarioCadastradoException e) {

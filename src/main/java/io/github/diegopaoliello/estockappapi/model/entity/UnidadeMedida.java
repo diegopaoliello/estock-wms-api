@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -17,9 +19,11 @@ import javax.validation.constraints.NotEmpty;
 public class UnidadeMedida extends AbstractEntity {
 	@Column(nullable = false, length = 500)
 	@NotEmpty(message = "{campo.descricao.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String descricao;
 
 	@Column(nullable = false, length = 50)
 	@NotEmpty(message = "{campo.sigla.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String sigla;
 }

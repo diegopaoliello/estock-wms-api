@@ -5,7 +5,7 @@ import io.github.diegopaoliello.estockappapi.model.entity.ServicoPrestado;
 import io.github.diegopaoliello.estockappapi.model.repository.ClienteRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.ServicoPrestadoRepository;
 import io.github.diegopaoliello.estockappapi.rest.dto.ServicoPrestadoDTO;
-import io.github.diegopaoliello.estockappapi.util.BigDecimalConverter;
+import io.github.diegopaoliello.estockappapi.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,6 @@ public class ServicoPrestadoController {
 
 	private final ClienteRepository clienteRepository;
 	private final ServicoPrestadoRepository repository;
-	private final BigDecimalConverter bigDecimalConverter;
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -38,7 +37,7 @@ public class ServicoPrestadoController {
 		servicoPrestado.setDescricao(dto.getDescricao());
 		servicoPrestado.setData(data);
 		servicoPrestado.setCliente(cliente);
-		servicoPrestado.setValor(bigDecimalConverter.converter(dto.getPreco()));
+		servicoPrestado.setValor(Util.bigDecimalConverter(dto.getPreco()));
 
 		return repository.save(servicoPrestado);
 	}

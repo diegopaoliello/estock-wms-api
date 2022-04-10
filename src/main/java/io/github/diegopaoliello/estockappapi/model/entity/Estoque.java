@@ -11,6 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -20,9 +22,11 @@ public class Estoque extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "estoque_produto_fk"))
 	@NotNull(message = "{campo.produto.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Produto produto;
 
 	@Column(nullable = false)
-	@NotEmpty(message = "{campo.quantidade.obrigatorio}")
-	private BigDecimal quantidade;
+	@NotNull(message = "{campo.quantidade.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private BigDecimal quantidade = BigDecimal.ZERO;
 }

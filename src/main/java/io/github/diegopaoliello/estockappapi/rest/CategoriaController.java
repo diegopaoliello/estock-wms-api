@@ -5,9 +5,9 @@ import io.github.diegopaoliello.estockappapi.service.CategoriaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +19,7 @@ public class CategoriaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Categoria salvar(@RequestBody @Valid Categoria categoria) {
+	public Categoria salvar(@RequestBody @Validated Categoria categoria) {
 		return service.salvar(categoria);
 	}
 
@@ -31,7 +31,7 @@ public class CategoriaController {
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable Integer id, @RequestBody @Valid Categoria categoria) {
+	public void atualizar(@PathVariable Integer id, @RequestBody @Validated Categoria categoria) {
 		service.atualizar(id, categoria);
 	}
 

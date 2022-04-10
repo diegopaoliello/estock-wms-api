@@ -21,10 +21,15 @@ public class UsuarioService implements UserDetailsService {
 	private UsuarioRepository repository;
 
 	public Usuario salvar(Usuario usuario) {
-		boolean exists = repository.existsByUsername(usuario.getUsername());
-		if (exists) {
-			throw new UsuarioCadastradoException(usuario.getUsername());
+		try {
+			boolean exists = repository.existsByUsername(usuario.getUsername());
+			if (exists) {
+				throw new UsuarioCadastradoException(usuario.getUsername());
+			}
+		} catch (UsuarioCadastradoException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+
 		return repository.save(usuario);
 	}
 

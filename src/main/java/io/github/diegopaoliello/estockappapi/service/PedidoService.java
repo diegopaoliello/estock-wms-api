@@ -23,17 +23,51 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	@Autowired
 	private EstoqueEntradaService entradaEstoqueService;
 
+	private Boolean isAprovandoPedido = false;
+
 	public PedidoService() {
 		super(Pedido.class);
 	}
 
 	@Override
 	public Pedido salvar(Pedido pedido) {
-		pedido.setStatus(PedidoStatus.ABERTO);
+		try {
+			pedido.setStatus(PedidoStatus.ABERTO);
 
-		pedido = super.salvar(pedido);
+			pedido = super.salvar(pedido);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 
 		return pedido;
+	}
+
+	@Override
+	public void atualizar(Integer id, Pedido pedidoAtualizado) {
+		PedidoStatus statusAtualizado = pedidoAtualizado.getStatus();
+
+		repository.findById(id).map(pedido -> {
+
+			permiteAlterarStatus(pedido.getStatus(), statusAtualizado);
+			isAprovandoPedido = isAprovandoPedido(pedido.getStatus(), statusAtualizado);
+
+			pedido = pedidoAtualizado;
+			pedido.setId(id);
+			pedido.setUsuario(super.usuarioService.findAuthenticatedUser());
+
+			pedido = repository.save(pedido);
+
+			if (isAprovandoPedido) {
+				List<PedidoItem> itensPedido = itemPedidoService.acharPorPedido(pedido);
+
+				for (PedidoItem itemPedido : itensPedido) {
+					entradaEstoqueService.gerar(itemPedido);
+				}
+			}
+
+			return pedido;
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+				this.entityClass.getSimpleName() + " não encontrado"));
 	}
 
 	@Transactional
@@ -42,10 +76,11 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 			Pedido pedido = acharPorId(id);
 
 			permiteAlterarStatus(pedido.getStatus(), statusAtualizado);
+			isAprovandoPedido = isAprovandoPedido(pedido.getStatus(), statusAtualizado);
 
 			super.repository.updateStatus(id, statusAtualizado);
 
-			if (isAprovandoPedido(pedido.getStatus(), statusAtualizado)) {
+			if (isAprovandoPedido) {
 				List<PedidoItem> itensPedido = itemPedidoService.acharPorPedido(pedido);
 
 				for (PedidoItem itemPedido : itensPedido) {
@@ -58,7 +93,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	}
 
 	private boolean isAprovandoPedido(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
-		return (statusAnterior == PedidoStatus.ABERTO && statusAtualizado == PedidoStatus.CONCLUIDO);
+		return (statusAnterior == PedidoStatus.APROVADO && statusAtualizado == PedidoStatus.CONCLUIDO);
 	}
 
 	private void permiteAlterarStatus(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
@@ -70,7 +105,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 			throw new PedidoStatusException(statusAtualizado.getAcao());
 		}
 
-		if (statusAtualizado.equals(PedidoStatus.REPROVADO) && !statusAnterior.equals(PedidoStatus.APROVADO)) {
+		if (statusAtualizado.equals(PedidoStatus.REPROVADO) && !statusAnterior.equals(PedidoStatus.ABERTO)) {
 			throw new PedidoStatusException(statusAtualizado.getAcao());
 		}
 

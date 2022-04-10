@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 @Component
-public class BigDecimalConverter {
+public class Util {
 
-	public BigDecimal converter(String value) {
+	public static BigDecimal bigDecimalConverter(String value) {
 		if (value == null) {
 			return null;
 		}

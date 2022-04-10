@@ -5,8 +5,11 @@ import io.github.diegopaoliello.estockappapi.model.entity.EstoqueEntrada;
 import io.github.diegopaoliello.estockappapi.model.entity.PedidoItem;
 import io.github.diegopaoliello.estockappapi.model.entity.Produto;
 import io.github.diegopaoliello.estockappapi.model.repository.EstoqueRepository;
+import io.github.diegopaoliello.estockappapi.util.Util;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +34,12 @@ public class EstoqueService extends AbstractService<Estoque, EstoqueRepository> 
 		estoqueProduto.setUsuario(estoqueEntrada.getUsuario());
 
 		return super.salvar(estoqueProduto);
+	}
+
+	public List<Estoque> listar(Integer idProduto, BigDecimal quantidade) {
+		List<Estoque> estoque = repository.listar(idProduto, quantidade)
+				.orElse(new ArrayList<Estoque>());
+
+		return estoque;
 	}
 }

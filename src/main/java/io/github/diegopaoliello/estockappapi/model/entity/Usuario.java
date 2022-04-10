@@ -6,13 +6,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Data
@@ -27,6 +26,7 @@ public class Usuario extends AbstractEntity {
 	@Column(name = "senha")
 	@NotEmpty(message = "{campo.senha.obrigatorio}")
 	@Getter(AccessLevel.NONE)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String password;
 
 	@JsonIgnore

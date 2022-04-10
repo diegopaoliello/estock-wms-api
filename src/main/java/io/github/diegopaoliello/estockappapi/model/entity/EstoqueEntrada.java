@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Data
@@ -17,6 +20,7 @@ import javax.validation.constraints.NotEmpty;
 public class EstoqueEntrada extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = "id_pedido_item", foreignKey = @ForeignKey(name = "entrada_pedido_item_fk"))
-	@NotEmpty(message = "{campo.itemPedido.obrigatorio}")
+	@NotNull(message = "{campo.itemPedido.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private PedidoItem itemPedido;
 }

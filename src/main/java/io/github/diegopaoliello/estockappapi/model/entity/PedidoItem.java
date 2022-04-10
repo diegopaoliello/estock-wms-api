@@ -12,37 +12,50 @@ import java.math.BigDecimal;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 public class PedidoItem extends AbstractEntity {
+	@ManyToOne
+	@JoinColumn(name = "id_pedido", nullable = false, foreignKey = @ForeignKey(name = "pedido_item_fk"))
+	@NotNull(groups = AfterValidInfo.class, message = "{campo.pedido.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private Pedido pedido;
+
 	@Column(nullable = false)
+	@NotNull(groups = BeforeValidInfo.class, message = "{campo.quantidade.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private BigDecimal quantidade;
 
 	@Column(nullable = false)
+	@NotNull(groups = BeforeValidInfo.class, message = "{campo.preco.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private BigDecimal preco;
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private BigDecimal desconto;
 
 	@Column(nullable = false)
 	@Setter(AccessLevel.NONE)
+	@NotNull(groups = AfterValidInfo.class, message = "{campo.valor.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private BigDecimal valorFinal;
 
 	@ManyToOne
-	@JoinColumn(name = "id_pedido", nullable = false, foreignKey = @ForeignKey(name = "pedido_item_fk"))
-	@NotNull(message = "{campo.pedido.obrigatorio}")
-	Pedido pedido;
-
-	@ManyToOne
 	@JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "pedido_item_produto_fk"))
-	@NotNull(message = "{campo.produto.obrigatorio}")
-	Produto produto;
+	@NotNull(groups = BeforeValidInfo.class, message = "{campo.produto.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private Produto produto;
 
 	private void calcularValorFinal() {
 		if (desconto != null) {
 			this.valorFinal = this.preco.subtract(desconto);
+		} else {
+			this.valorFinal = this.preco;
 		}
 	}
 
@@ -57,5 +70,4 @@ public class PedidoItem extends AbstractEntity {
 		calcularValorFinal();
 		super.beforeUpdate();
 	}
-
 }

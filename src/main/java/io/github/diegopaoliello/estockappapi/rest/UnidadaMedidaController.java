@@ -1,14 +1,13 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
 import io.github.diegopaoliello.estockappapi.model.entity.UnidadeMedida;
-import io.github.diegopaoliello.estockappapi.rest.dto.UnidadeMedidaDTO;
 import io.github.diegopaoliello.estockappapi.service.UnidadeMedidaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,22 +19,13 @@ public class UnidadaMedidaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public UnidadeMedida salvar(@RequestBody @Valid UnidadeMedidaDTO unidadeMedidaDTO) {
-		UnidadeMedida unidadeMedida = new UnidadeMedida();
-
-		unidadeMedida.setDescricao(unidadeMedidaDTO.getDescricao());
-		unidadeMedida.setSigla(unidadeMedidaDTO.getSigla());
-
+	public UnidadeMedida salvar(@RequestBody @Validated UnidadeMedida unidadeMedida) {
 		return service.salvar(unidadeMedida);
 	}
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable Integer id, @RequestBody @Valid UnidadeMedidaDTO unidadeMedidaDTO) {
-		UnidadeMedida unidadeMedida = new UnidadeMedida();
-
-		unidadeMedida.setDescricao(unidadeMedidaDTO.getDescricao());
-		unidadeMedida.setSigla(unidadeMedidaDTO.getSigla());
+	public void atualizar(@PathVariable Integer id, @RequestBody @Validated UnidadeMedida unidadeMedida) {
 
 		service.atualizar(id, unidadeMedida);
 	}
