@@ -5,7 +5,6 @@ import io.github.diegopaoliello.estockappapi.model.entity.EstoqueEntrada;
 import io.github.diegopaoliello.estockappapi.model.entity.PedidoItem;
 import io.github.diegopaoliello.estockappapi.model.entity.Produto;
 import io.github.diegopaoliello.estockappapi.model.repository.EstoqueRepository;
-import io.github.diegopaoliello.estockappapi.util.Util;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
