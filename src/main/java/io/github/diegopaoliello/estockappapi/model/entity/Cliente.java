@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -20,14 +20,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente extends AbstractEntity {
-	@Column(nullable = false, length = 150)
-	@NotEmpty(message = "{campo.nome.obrigatorio}")
+	@Column(nullable = false, length = 500)
+	@NotEmpty(message = "{campo.razao_social.obrigatorio}")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private String nome;
+	private String razaoSocial;
 
-	@Column(nullable = false, length = 11)
-	@NotNull(message = "{campo.cpf.obrigatorio}")
-	@CPF(message = "{campo.cpf.invalido}")
+	@Column(nullable = false, length = 500)
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private String cpf;
+	private String nomeFantasia;
+
+	@Column(nullable = false, length = 14)
+	@NotNull(message = "{campo.cnpj.obrigatorio}")
+	@CNPJ(message = "{campo.cnpj.invalido}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String cnpj;
 }

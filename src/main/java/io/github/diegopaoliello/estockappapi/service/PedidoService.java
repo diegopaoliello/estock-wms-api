@@ -97,7 +97,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	}
 
 	private void permiteAlterarStatus(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
-		if (statusAtualizado.equals(statusAnterior)) {
+		if (!statusAtualizado.equals(PedidoStatus.ABERTO) && statusAtualizado.equals(statusAnterior)) {
 			throw new PedidoStatusAtualException(statusAtualizado.getDescricao());
 		}
 

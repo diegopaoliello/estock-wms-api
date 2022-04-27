@@ -18,9 +18,15 @@ public class EstoqueEntradaService extends AbstractService<EstoqueEntrada, Estoq
 
 	public EstoqueEntrada gerar(PedidoItem itemPedido) {
 		EstoqueEntrada entradaEstoque = new EstoqueEntrada();
+		
 		entradaEstoque.setItemPedido(itemPedido);
+		entradaEstoque.setProduto(itemPedido.getProduto());
+		entradaEstoque.setPreco(itemPedido.getValorFinal());
+		entradaEstoque.setQuantidade(itemPedido.getQuantidade());
+		
 		entradaEstoque = super.salvar(entradaEstoque);
-		estoqueService.salvar(entradaEstoque);
+		
+		estoqueService.entrada(entradaEstoque);
 
 		return entradaEstoque;
 	}

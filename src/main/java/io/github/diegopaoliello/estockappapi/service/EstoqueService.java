@@ -2,6 +2,7 @@ package io.github.diegopaoliello.estockappapi.service;
 
 import io.github.diegopaoliello.estockappapi.model.entity.Estoque;
 import io.github.diegopaoliello.estockappapi.model.entity.EstoqueEntrada;
+import io.github.diegopaoliello.estockappapi.model.entity.EstoqueSaida;
 import io.github.diegopaoliello.estockappapi.model.entity.PedidoItem;
 import io.github.diegopaoliello.estockappapi.model.entity.Produto;
 import io.github.diegopaoliello.estockappapi.model.repository.EstoqueRepository;
@@ -22,9 +23,9 @@ public class EstoqueService extends AbstractService<Estoque, EstoqueRepository> 
 		super(Estoque.class);
 	}
 
-	public Estoque salvar(EstoqueEntrada estoqueEntrada) {
+	public Estoque entrada(EstoqueEntrada estoqueEntrada) {
 		PedidoItem pedidoItem = pedidoItemService.acharPorId(estoqueEntrada.getItemPedido().getId());
-		Produto produto = estoqueEntrada.getItemPedido().getProduto();
+		Produto produto = pedidoItem.getProduto();
 		Estoque estoqueProduto = super.repository.findByProduto(produto).map(estoque -> estoque).orElse(new Estoque());
 		BigDecimal quantidade = estoqueProduto.getQuantidade().add(pedidoItem.getQuantidade());
 
@@ -35,9 +36,21 @@ public class EstoqueService extends AbstractService<Estoque, EstoqueRepository> 
 		return super.salvar(estoqueProduto);
 	}
 
+	public Estoque saida(EstoqueSaida estoqueSaida) {
+		PedidoItem pedidoItem = pedidoItemService.acharPorId(estoqueSaida.getItemVenda().getId());
+		Produto produto = pedidoItem.getProduto();
+		Estoque estoqueProduto = super.repository.findByProduto(produto).map(estoque -> estoque).orElse(new Estoque());
+		BigDecimal quantidade = estoqueProduto.getQuantidade().subtract(pedidoItem.getQuantidade());
+
+		estoqueProduto.setProduto(produto);
+		estoqueProduto.setQuantidade(quantidade);
+		estoqueProduto.setUsuario(estoqueSaida.getUsuario());
+
+		return super.salvar(estoqueProduto);
+	}
+
 	public List<Estoque> listar(Integer idProduto, BigDecimal quantidade) {
-		List<Estoque> estoque = repository.listar(idProduto, quantidade)
-				.orElse(new ArrayList<Estoque>());
+		List<Estoque> estoque = repository.listar(idProduto, quantidade).orElse(new ArrayList<Estoque>());
 
 		return estoque;
 	}

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -38,4 +40,12 @@ public class Produto extends AbstractEntity {
 	@JoinColumn(name = "id_unidade_medida")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private UnidadeMedida unidadeMedida;
+
+	@Column(nullable = false)
+	@NotNull(groups = BeforeValidInfo.class, message = "{campo.quantidade_minima.obrigatorio}")
+	private BigDecimal quantidadeMinima = BigDecimal.ZERO;
+
+	@Column(nullable = false)
+	@NotNull(groups = AfterValidInfo.class, message = "{campo.preco_medio.obrigatorio}")
+	private BigDecimal precoMedio = BigDecimal.ZERO;
 }
