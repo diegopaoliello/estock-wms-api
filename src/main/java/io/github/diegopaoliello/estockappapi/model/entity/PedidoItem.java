@@ -37,7 +37,7 @@ public class PedidoItem extends AbstractEntity {
 	private BigDecimal preco;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private BigDecimal desconto;
+	private BigDecimal desconto = BigDecimal.ZERO;
 
 	@Column(nullable = false)
 	@Setter(AccessLevel.NONE)

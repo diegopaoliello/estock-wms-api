@@ -2,7 +2,6 @@ package io.github.diegopaoliello.estockappapi.rest;
 
 import io.github.diegopaoliello.estockappapi.model.entity.EstoqueEntrada;
 import io.github.diegopaoliello.estockappapi.service.EstoqueEntradaService;
-import io.github.diegopaoliello.estockappapi.service.EstoqueEntradaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

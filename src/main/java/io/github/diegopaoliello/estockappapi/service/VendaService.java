@@ -23,7 +23,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 	@Autowired
 	private EstoqueSaidaService saidaEstoqueService;
 
-	private Boolean isAprovandoVenda = false;
+	private Boolean isConcluindoVenda = false;
 
 	public VendaService() {
 		super(Venda.class);
@@ -49,7 +49,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 		repository.findById(id).map(venda -> {
 
 			permiteAlterarStatus(venda.getStatus(), statusAtualizado);
-			isAprovandoVenda = isAprovandoVenda(venda.getStatus(), statusAtualizado);
+			isConcluindoVenda = isConcluindoVenda(venda.getStatus(), statusAtualizado);
 
 			venda = vendaAtualizado;
 			venda.setId(id);
@@ -57,7 +57,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 
 			venda = repository.save(venda);
 
-			if (isAprovandoVenda) {
+			if (isConcluindoVenda) {
 				List<VendaItem> itensVenda = itemVendaService.acharPorVenda(venda);
 
 				for (VendaItem itemVenda : itensVenda) {
@@ -76,11 +76,11 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 			Venda venda = acharPorId(id);
 
 			permiteAlterarStatus(venda.getStatus(), statusAtualizado);
-			isAprovandoVenda = isAprovandoVenda(venda.getStatus(), statusAtualizado);
+			isConcluindoVenda = isConcluindoVenda(venda.getStatus(), statusAtualizado);
 
 			super.repository.updateStatus(id, statusAtualizado);
 
-			if (isAprovandoVenda) {
+			if (isConcluindoVenda) {
 				List<VendaItem> itensVenda = itemVendaService.acharPorVenda(venda);
 
 				for (VendaItem itemVenda : itensVenda) {
@@ -92,7 +92,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 		}
 	}
 
-	private boolean isAprovandoVenda(VendaStatus statusAnterior, VendaStatus statusAtualizado) {
+	private boolean isConcluindoVenda(VendaStatus statusAnterior, VendaStatus statusAtualizado) {
 		return (statusAnterior == VendaStatus.APROVADO && statusAtualizado == VendaStatus.CONCLUIDO);
 	}
 
