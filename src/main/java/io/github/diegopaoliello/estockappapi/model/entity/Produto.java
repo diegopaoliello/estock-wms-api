@@ -41,9 +41,11 @@ public class Produto extends AbstractEntity {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private UnidadeMedida unidadeMedida;
 
-	@Column(nullable = false)
-	@NotNull(groups = BeforeValidInfo.class, message = "{campo.quantidade_minima.obrigatorio}")
+	@Column
 	private BigDecimal quantidadeMinima = BigDecimal.ZERO;
+	
+	@Column
+	private BigDecimal quantidadeMaxima = BigDecimal.ZERO;
 
 	@Column(nullable = false)
 	@NotNull(groups = AfterValidInfo.class, message = "{campo.preco_medio.obrigatorio}")

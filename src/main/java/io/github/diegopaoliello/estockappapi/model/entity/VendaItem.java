@@ -51,23 +51,27 @@ public class VendaItem extends AbstractEntity {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Produto produto;
 
-	private void calcularValorFinal() {
+	public BigDecimal calcularValorFinal() {
+		BigDecimal valorFinal;
+
 		if (desconto != null) {
-			this.valorFinal = this.preco.subtract(desconto);
+			valorFinal = this.preco.subtract(desconto);
 		} else {
-			this.valorFinal = this.preco;
+			valorFinal = this.preco;
 		}
+
+		return valorFinal;
 	}
 
 	@Override
 	public void beforeSave() {
-		calcularValorFinal();
+		this.valorFinal = calcularValorFinal();
 		super.beforeSave();
 	}
 
 	@Override
 	public void beforeUpdate() {
-		calcularValorFinal();
+		this.valorFinal = calcularValorFinal();
 		super.beforeUpdate();
 	}
 }

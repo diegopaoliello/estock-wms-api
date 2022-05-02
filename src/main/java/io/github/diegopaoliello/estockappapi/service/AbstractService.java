@@ -20,8 +20,14 @@ public abstract class AbstractService<T extends AbstractEntity, R extends JpaRep
 
 	protected Class<? extends T> entityClass;
 
+	private String nomeEntidade;
+
 	public AbstractService(Class<? extends T> entityClass) {
-		this.entityClass = entityClass;
+		this.nomeEntidade = entityClass.getSimpleName();
+	}
+	
+	public AbstractService(String nomeEntidade) {
+		this.nomeEntidade = nomeEntidade;
 	}
 
 	public T salvar(T entity) {
@@ -36,21 +42,19 @@ public abstract class AbstractService<T extends AbstractEntity, R extends JpaRep
 			entity.setId(id);
 			entity.setUsuario(usuarioService.findAuthenticatedUser());
 			return repository.save(entity);
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-				this.entityClass.getSimpleName() + " não encontrado"));
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, this.nomeEntidade + " não encontrado"));
 	}
 
 	public void deletar(Integer id) {
 		repository.findById(id).map(entity -> {
 			repository.delete(entity);
 			return Void.TYPE;
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-				this.entityClass.getSimpleName() + " não encontrado"));
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, this.nomeEntidade + " não encontrado"));
 	}
 
 	public T acharPorId(Integer id) {
-		return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-				this.entityClass.getSimpleName() + " não encontrado"));
+		return repository.findById(id).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, this.nomeEntidade + " não encontrado"));
 	}
 
 	public List<T> listar() {

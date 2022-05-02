@@ -5,6 +5,7 @@ import io.github.diegopaoliello.estockappapi.model.entity.EstoqueEntrada;
 import io.github.diegopaoliello.estockappapi.model.entity.EstoqueSaida;
 import io.github.diegopaoliello.estockappapi.model.entity.PedidoItem;
 import io.github.diegopaoliello.estockappapi.model.entity.Produto;
+import io.github.diegopaoliello.estockappapi.model.entity.VendaItem;
 import io.github.diegopaoliello.estockappapi.model.repository.EstoqueRepository;
 
 import java.math.BigDecimal;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Service;
 public class EstoqueService extends AbstractService<Estoque, EstoqueRepository> {
 	@Autowired
 	private PedidoItemService pedidoItemService;
+
+	@Autowired
+	private VendaItemService vendaItemService;
 
 	public EstoqueService() {
 		super(Estoque.class);
@@ -37,10 +41,10 @@ public class EstoqueService extends AbstractService<Estoque, EstoqueRepository> 
 	}
 
 	public Estoque saida(EstoqueSaida estoqueSaida) {
-		PedidoItem pedidoItem = pedidoItemService.acharPorId(estoqueSaida.getItemVenda().getId());
-		Produto produto = pedidoItem.getProduto();
+		VendaItem vendaItem = vendaItemService.acharPorId(estoqueSaida.getItemVenda().getId());
+		Produto produto = vendaItem.getProduto();
 		Estoque estoqueProduto = super.repository.findByProduto(produto).map(estoque -> estoque).orElse(new Estoque());
-		BigDecimal quantidade = estoqueProduto.getQuantidade().subtract(pedidoItem.getQuantidade());
+		BigDecimal quantidade = estoqueProduto.getQuantidade().subtract(vendaItem.getQuantidade());
 
 		estoqueProduto.setProduto(produto);
 		estoqueProduto.setQuantidade(quantidade);

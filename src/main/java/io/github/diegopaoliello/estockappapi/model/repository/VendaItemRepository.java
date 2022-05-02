@@ -1,5 +1,6 @@
 package io.github.diegopaoliello.estockappapi.model.repository;
 
+import io.github.diegopaoliello.estockappapi.model.entity.Produto;
 import io.github.diegopaoliello.estockappapi.model.entity.Venda;
 import io.github.diegopaoliello.estockappapi.model.entity.VendaItem;
 
@@ -17,4 +18,10 @@ public interface VendaItemRepository extends JpaRepository<VendaItem, Integer> {
 	List<VendaItem> listar(@Param("idVenda") Integer idVenda);
 
 	Optional<List<VendaItem>> findByVenda(Venda venda);
+
+	Optional<VendaItem> findByVendaAndProduto(Venda venda, Produto produto);
+
+	@Query("select vi from VendaItem vi INNER JOIN vi.venda v where v.id <> :idVenda AND vi.produto.id = :idProduto AND v.status='ABERTO'")
+	Optional<List<VendaItem>> findByProdutoAndStatusEqualAberto(@Param("idVenda") Integer idVenda,
+			@Param("idProduto") Integer idProduto);
 }

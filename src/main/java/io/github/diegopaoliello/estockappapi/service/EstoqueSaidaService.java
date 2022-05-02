@@ -13,7 +13,7 @@ public class EstoqueSaidaService extends AbstractService<EstoqueSaida, EstoqueSa
 	private EstoqueService estoqueService;
 
 	public EstoqueSaidaService() {
-		super(EstoqueSaida.class);
+		super("Saída de Estoque");
 	}
 
 	public EstoqueSaida gerar(VendaItem itemVenda) {

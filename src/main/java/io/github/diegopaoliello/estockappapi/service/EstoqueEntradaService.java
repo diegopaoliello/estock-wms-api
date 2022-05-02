@@ -17,7 +17,7 @@ public class EstoqueEntradaService extends AbstractService<EstoqueEntrada, Estoq
 	private ProdutoService produtoService;
 
 	public EstoqueEntradaService() {
-		super(EstoqueEntrada.class);
+		super("Entrada de Estoque");
 	}
 
 	public EstoqueEntrada gerar(PedidoItem itemPedido) {

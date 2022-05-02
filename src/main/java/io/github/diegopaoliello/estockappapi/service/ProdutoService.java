@@ -1,5 +1,6 @@
 package io.github.diegopaoliello.estockappapi.service;
 
+import io.github.diegopaoliello.estockappapi.exception.ProdutoQtdeMinMaiorMax;
 import io.github.diegopaoliello.estockappapi.model.entity.EstoqueEntrada;
 import io.github.diegopaoliello.estockappapi.model.entity.Produto;
 import io.github.diegopaoliello.estockappapi.model.repository.EstoqueEntradaRepository;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ProdutoService extends AbstractService<Produto, ProdutoRepository> {
@@ -22,7 +25,31 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 	private EstoqueEntradaRepository estoqueEntradaRepository;
 
 	public ProdutoService() {
-		super(Produto.class);
+		super("Produto");
+	}
+
+	@Override
+	public Produto salvar(Produto produto) {
+		try {
+			preencheValoresAusentes(produto);
+			valida(produto);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+
+		return super.salvar(produto);
+	}
+
+	@Override
+	public void atualizar(Integer id, Produto produto) {
+		try {
+			preencheValoresAusentes(produto);
+			valida(produto);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+
+		super.atualizar(id, produto);
 	}
 
 	public BigDecimal calcularPrecoMedio(Produto produto) {
@@ -37,7 +64,11 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 		BigDecimal quantidadeTotal = estoqueEntrada.stream().map(x -> x.getQuantidade()).reduce(BigDecimal.ZERO,
 				BigDecimal::add);
 
-		BigDecimal precoMedio = valorTotal.divide(quantidadeTotal, 2, RoundingMode.HALF_UP);
+		BigDecimal precoMedio = BigDecimal.ZERO;
+
+		if (valorTotal.compareTo(BigDecimal.ZERO) == 1 && quantidadeTotal.compareTo(BigDecimal.ZERO) == 1) {
+			precoMedio = valorTotal.divide(quantidadeTotal, 2, RoundingMode.HALF_UP);
+		}
 
 		return precoMedio;
 	}
@@ -54,6 +85,22 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 		produto.setPrecoMedio(precoMedio);
 
 		super.atualizar(produto.getId(), produto);
+	}
+
+	private void valida(Produto produto) {
+		if (produto.getQuantidadeMinima().compareTo(produto.getQuantidadeMaxima()) == 1) {
+			throw new ProdutoQtdeMinMaiorMax();
+		}
+	}
+
+	private void preencheValoresAusentes(Produto produto) {
+		if (produto.getQuantidadeMinima() == null) {
+			produto.setQuantidadeMinima(BigDecimal.ZERO);
+		}
+
+		if (produto.getQuantidadeMaxima() == null) {
+			produto.setQuantidadeMaxima(BigDecimal.ZERO);
+		}
 	}
 
 }

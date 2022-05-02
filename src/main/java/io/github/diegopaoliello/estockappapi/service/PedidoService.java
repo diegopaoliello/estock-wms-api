@@ -26,7 +26,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	private Boolean isAprovandoPedido = false;
 
 	public PedidoService() {
-		super(Pedido.class);
+		super("Pedido de Compras");
 	}
 
 	@Override
