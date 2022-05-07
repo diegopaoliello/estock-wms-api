@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vendas/{idVenda}/itens-venda")
+@RequestMapping("/vendas/{idVenda}/itens")
 public class VendaItemController {
 
 	@Autowired

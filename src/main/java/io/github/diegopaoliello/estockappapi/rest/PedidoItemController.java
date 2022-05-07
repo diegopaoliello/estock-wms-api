@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pedidos/{idPedido}/itens-pedido")
+@RequestMapping("/pedidos/{idPedido}/itens")
 public class PedidoItemController {
 
 	@Autowired
@@ -52,7 +52,7 @@ public class PedidoItemController {
 	}
 
 	@GetMapping
-	public List<PedidoItem> listar(@PathVariable(value = "idPedido") Integer idPedido) {
+	public List<PedidoItem> listar(@PathVariable(name = "idPedido") Integer idPedido) {
 		return service.listar(idPedido);
 	}
 }

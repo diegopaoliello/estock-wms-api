@@ -1,6 +1,7 @@
 package io.github.diegopaoliello.estockappapi.service;
 
 import io.github.diegopaoliello.estockappapi.exception.ProdutoQtdeMinMaiorMax;
+import io.github.diegopaoliello.estockappapi.exception.UniqueException;
 import io.github.diegopaoliello.estockappapi.model.entity.EstoqueEntrada;
 import io.github.diegopaoliello.estockappapi.model.entity.Produto;
 import io.github.diegopaoliello.estockappapi.model.repository.EstoqueEntradaRepository;
@@ -21,6 +22,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ProdutoService extends AbstractService<Produto, ProdutoRepository> {
+	private static String entidade = "Produto";
+
 	@Autowired
 	private EstoqueEntradaRepository estoqueEntradaRepository;
 
@@ -32,7 +35,7 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 	public Produto salvar(Produto produto) {
 		try {
 			preencheValoresAusentes(produto);
-			valida(produto);
+			valida(null, produto);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -43,8 +46,9 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 	@Override
 	public void atualizar(Integer id, Produto produto) {
 		try {
+			produto.setId(id);
 			preencheValoresAusentes(produto);
-			valida(produto);
+			valida(id, produto);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -87,9 +91,17 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 		super.atualizar(produto.getId(), produto);
 	}
 
-	private void valida(Produto produto) {
+	private void valida(Integer id, Produto produto) {
 		if (produto.getQuantidadeMinima().compareTo(produto.getQuantidadeMaxima()) == 1) {
 			throw new ProdutoQtdeMinMaiorMax();
+		}
+
+		String codigo = produto.getCodigo();
+
+		boolean exists = repository.existsByIdNotAndCodigo(id == null ? 0 : id, codigo);
+
+		if (exists) {
+			throw new UniqueException(entidade);
 		}
 	}
 

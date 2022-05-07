@@ -1,6 +1,6 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
-import io.github.diegopaoliello.estockappapi.exception.UsuarioCadastradoException;
+import io.github.diegopaoliello.estockappapi.exception.UniqueException;
 import io.github.diegopaoliello.estockappapi.model.entity.Usuario;
 import io.github.diegopaoliello.estockappapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +21,22 @@ public class UsuarioController {
 	public void salvar(@RequestBody @Validated Usuario usuario) {
 		try {
 			service.salvar(usuario);
-		} catch (UsuarioCadastradoException e) {
+		} catch (UniqueException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
-	@GetMapping
-	public Usuario acharUsuario() {
-		return service.findAuthenticatedUser();
+	@GetMapping("{idOrUserName}")
+	public Usuario acharUsuario(@PathVariable String idOrUserName) {
+		Usuario usuario = new Usuario();
+
+		try {
+			usuario = service.acharUsuarioAutenticado(Integer.parseInt(idOrUserName));
+		} catch (NumberFormatException e) {
+			System.out.println(e);
+			service.existePorNome(idOrUserName);
+		}
+
+		return usuario;
 	}
 }

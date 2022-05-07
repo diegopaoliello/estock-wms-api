@@ -53,7 +53,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 
 			pedido = pedidoAtualizado;
 			pedido.setId(id);
-			pedido.setUsuario(super.usuarioService.findAuthenticatedUser());
+			pedido.setUsuario(super.usuarioService.acharUsuarioAutenticado());
 
 			pedido = repository.save(pedido);
 

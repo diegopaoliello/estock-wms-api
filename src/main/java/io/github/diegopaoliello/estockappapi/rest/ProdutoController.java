@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -45,10 +44,5 @@ public class ProdutoController {
 	@GetMapping("{id}")
 	public Produto acharPorId(@PathVariable Integer id) {
 		return service.acharPorId(id);
-	}
-
-	@GetMapping("{idProduto}/calcularPrecoMedio")
-	public BigDecimal calcularPrecoMedio(@PathVariable(value = "idProduto") Integer idProduto) {
-		return service.calcularPrecoMedio(idProduto);
 	}
 }

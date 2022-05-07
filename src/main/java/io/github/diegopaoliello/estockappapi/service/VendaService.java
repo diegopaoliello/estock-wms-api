@@ -53,7 +53,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 
 			venda = vendaAtualizado;
 			venda.setId(id);
-			venda.setUsuario(super.usuarioService.findAuthenticatedUser());
+			venda.setUsuario(super.usuarioService.acharUsuarioAutenticado());
 
 			venda = repository.save(venda);
 

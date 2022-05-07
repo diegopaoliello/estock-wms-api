@@ -15,4 +15,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 	@Modifying
 	@Query("update Produto p set p.precoMedio = :precoMedio where p.id = :id")
 	void updatePrecoMedio(@Param("id") Integer id, @Param("precoMedio") BigDecimal precoMedio);
+
+	boolean existsByIdNotAndCodigo(Integer id, String codigo);
 }
