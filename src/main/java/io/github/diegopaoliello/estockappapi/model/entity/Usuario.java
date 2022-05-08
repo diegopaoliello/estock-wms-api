@@ -18,10 +18,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email", name = "email_uk"))
 public class Usuario extends AbstractEntity {
-	@Column(unique = true, name = "login")
-	@NotEmpty(message = "{campo.login.obrigatorio}")
-	private String username;
+	@Column
+	@NotEmpty(message = "{campo.nome.obrigatorio}")
+	private String nome;
+
+	@Column
+	@NotEmpty(message = "{campo.sobrenome.obrigatorio}")
+	private String sobrenome;
+
+	@Column
+	@NotEmpty(message = "{campo.email.obrigatorio}")
+	private String email;
 
 	@Column(name = "senha")
 	@NotEmpty(message = "{campo.senha.obrigatorio}")

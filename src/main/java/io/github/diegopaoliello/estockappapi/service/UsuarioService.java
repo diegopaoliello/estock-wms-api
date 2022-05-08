@@ -1,6 +1,7 @@
 package io.github.diegopaoliello.estockappapi.service;
 
 import io.github.diegopaoliello.estockappapi.exception.UsuarioAutenticadoException;
+import io.github.diegopaoliello.estockappapi.exception.UsuarioDiferenteDoAutenticadoException;
 import io.github.diegopaoliello.estockappapi.exception.UniqueException;
 import io.github.diegopaoliello.estockappapi.model.entity.Usuario;
 import io.github.diegopaoliello.estockappapi.model.repository.UsuarioRepository;
@@ -24,8 +25,8 @@ public class UsuarioService implements UserDetailsService {
 
 	public Usuario salvar(Usuario usuario) {
 		try {
-			String userName = usuario.getUsername();
-			boolean exists = repository.existsByUsername(userName);
+			String email = usuario.getEmail();
+			boolean exists = repository.existsByEmail(email);
 			if (exists) {
 				throw new UniqueException(entidade);
 			}
@@ -38,10 +39,9 @@ public class UsuarioService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		Usuario usuario = repository.findByUsername(userName)
-				.orElseThrow(() -> new UsernameNotFoundException(entidade + " não encontrado"));
+		Usuario usuario = acharPorEmail(userName);
 
-		return User.builder().username(usuario.getUsername()).password(usuario.getSenha()).roles("USER").build();
+		return User.builder().username(usuario.getEmail()).password(usuario.getSenha()).roles("USER").build();
 	}
 
 	public Usuario acharPorId(Integer id) {
@@ -49,13 +49,13 @@ public class UsuarioService implements UserDetailsService {
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, entidade + " não encontrado"));
 	}
 
-	public Usuario acharPorUserName(String userName) {
-		return repository.findByUsername(userName)
+	public Usuario acharPorEmail(String email) {
+		return repository.findByEmail(email)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, entidade + " não encontrado"));
 	}
 
 	public void existePorNome(String userName) {
-		if (acharPorUserName(userName) == null) {
+		if (acharPorEmail(userName) == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, entidade + " não encontrado");
 		} else {
 			throw new ResponseStatusException(HttpStatus.NO_CONTENT, entidade + " encontrado");
@@ -64,10 +64,16 @@ public class UsuarioService implements UserDetailsService {
 
 	public Usuario acharUsuarioAutenticado(Integer id) {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-
+		Usuario usuarioLogado = null;
 		try {
-			if (userName == null || userName.equals("anonymousUser")) {
+			if (userName != null && !userName.equals("anonymousUser")) {
+				usuarioLogado = acharPorEmail(userName);
+			} else {
 				throw new UsuarioAutenticadoException();
+			}
+
+			if (usuarioLogado != null && !usuarioLogado.getId().equals(id)) {
+				throw new UsuarioDiferenteDoAutenticadoException();
 			}
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -78,15 +84,6 @@ public class UsuarioService implements UserDetailsService {
 
 	public Usuario acharUsuarioAutenticado() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-		try {
-			if (userName == null || userName.equals("anonymousUser")) {
-				throw new UsuarioAutenticadoException();
-			}
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-		}
-
-		return acharPorUserName(userName);
+		return acharPorEmail(userName);
 	}
 }
