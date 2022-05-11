@@ -15,6 +15,7 @@ import javax.persistence.PreUpdate;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -29,8 +30,9 @@ public abstract class AbstractEntity {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "id_usuario", foreignKey = @ForeignKey(name = "usuario_fk"))
+	@JoinColumn(name = "id_usuario", nullable = false, foreignKey = @ForeignKey(name = "usuario_fk"))
 	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonBackReference
 	private Usuario usuario;
 
 	@Column(nullable = false, name = "data_cadastro", updatable = false)

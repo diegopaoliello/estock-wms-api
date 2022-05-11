@@ -1,25 +1,31 @@
 package io.github.diegopaoliello.estockappapi.model.entity;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email", name = "email_uk"))
-public class Usuario extends AbstractEntity {
+public class Usuario {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GenericGenerator(name = "increment", strategy = "increment")
+	private Integer id;
+
 	@Column
 	@NotEmpty(message = "{campo.nome.obrigatorio}")
 	private String nome;
@@ -34,12 +40,36 @@ public class Usuario extends AbstractEntity {
 
 	@Column(name = "senha")
 	@NotEmpty(message = "{campo.senha.obrigatorio}")
-	@Getter(AccessLevel.NONE)
-	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String password;
 
-	@JsonIgnore
-	public String getSenha() {
-		return this.password;
+	@ManyToOne
+	@JoinColumn(name = "id_perfil", nullable = false, foreignKey = @ForeignKey(name = "usuario_perfil_fk"))
+	@NotNull(groups = AfterValidInfo.class, message = "{campo.perfil.obrigatorio}")
+	private UsuarioPerfil perfil;
+
+	@ManyToOne
+	@NotNull(groups = BeforeValidInfo.class, message = "{campo.tipo_login.obrigatorio}")
+	@JoinColumn(name = "id_tipo_login", nullable = false, foreignKey = @ForeignKey(name = "usuario_tipo_login_fk"))
+	private UsuarioTipoLogin tipoLogin;
+
+	@Column(nullable = false, name = "data_cadastro", updatable = false)
+	@JsonFormat(pattern = "dd/MM/yyyy:HH:mm")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private LocalDateTime dataCadastro;
+
+	@Column(nullable = false, name = "data_atualizacao")
+	@JsonFormat(pattern = "dd/MM/yyyy:HH:mm")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private LocalDateTime dataAtualizacao;
+
+	@PrePersist
+	public void beforeSave() {
+		setDataCadastro(LocalDateTime.now());
+		setDataAtualizacao(LocalDateTime.now());
+	}
+
+	@PreUpdate
+	public void beforeUpdate() {
+		setDataAtualizacao(LocalDateTime.now());
 	}
 }

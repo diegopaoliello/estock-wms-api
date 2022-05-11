@@ -6,6 +6,7 @@ import io.github.diegopaoliello.estockappapi.model.entity.Venda;
 import io.github.diegopaoliello.estockappapi.model.entity.VendaItem;
 import io.github.diegopaoliello.estockappapi.model.entity.VendaStatus;
 import io.github.diegopaoliello.estockappapi.model.repository.VendaRepository;
+import io.github.diegopaoliello.estockappapi.model.repository.VendaStatusRepository;
 
 import java.util.List;
 
@@ -23,16 +24,21 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 	@Autowired
 	private EstoqueSaidaService saidaEstoqueService;
 
-	private Boolean isConcluindoVenda = false;
+	@Autowired
+	VendaStatusRepository vendaStatusRepository;
+
+	private Boolean isAprovandoVenda = false;
 
 	public VendaService() {
-		super(Venda.class);
+		super("Venda de Compras");
 	}
 
 	@Override
 	public Venda salvar(Venda venda) {
 		try {
-			venda.setStatus(VendaStatus.ABERTO);
+			VendaStatus status = vendaStatusRepository.findByCodigo("ABERTO");
+
+			venda.setStatus(status);
 
 			venda = super.salvar(venda);
 		} catch (Exception e) {
@@ -49,7 +55,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 		repository.findById(id).map(venda -> {
 
 			permiteAlterarStatus(venda.getStatus(), statusAtualizado);
-			isConcluindoVenda = isConcluindoVenda(venda.getStatus(), statusAtualizado);
+			isAprovandoVenda = isAprovandoVenda(venda.getStatus(), statusAtualizado);
 
 			venda = vendaAtualizado;
 			venda.setId(id);
@@ -57,7 +63,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 
 			venda = repository.save(venda);
 
-			if (isConcluindoVenda) {
+			if (isAprovandoVenda) {
 				List<VendaItem> itensVenda = itemVendaService.acharPorVenda(venda);
 
 				for (VendaItem itemVenda : itensVenda) {
@@ -71,16 +77,17 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 	}
 
 	@Transactional
-	public void atualizarStatus(Integer id, VendaStatus statusAtualizado) {
+	public void atualizarStatus(Integer id, String status) {
 		try {
 			Venda venda = acharPorId(id);
+			VendaStatus statusAtualizado = vendaStatusRepository.findByCodigo(status);
 
 			permiteAlterarStatus(venda.getStatus(), statusAtualizado);
-			isConcluindoVenda = isConcluindoVenda(venda.getStatus(), statusAtualizado);
+			isAprovandoVenda = isAprovandoVenda(venda.getStatus(), statusAtualizado);
 
 			super.repository.updateStatus(id, statusAtualizado);
 
-			if (isConcluindoVenda) {
+			if (isAprovandoVenda) {
 				List<VendaItem> itensVenda = itemVendaService.acharPorVenda(venda);
 
 				for (VendaItem itemVenda : itensVenda) {
@@ -92,24 +99,25 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 		}
 	}
 
-	private boolean isConcluindoVenda(VendaStatus statusAnterior, VendaStatus statusAtualizado) {
-		return (statusAnterior == VendaStatus.APROVADO && statusAtualizado == VendaStatus.CONCLUIDO);
+	private boolean isAprovandoVenda(VendaStatus statusAnterior, VendaStatus statusAtualizado) {
+		return (statusAnterior.getCodigo() == "APROVADO" && statusAnterior.getCodigo() == "CONCLUIDO");
 	}
 
 	private void permiteAlterarStatus(VendaStatus statusAnterior, VendaStatus statusAtualizado) {
-		if (!statusAtualizado.equals(VendaStatus.ABERTO) && statusAtualizado.equals(statusAnterior)) {
+		if (!statusAtualizado.getCodigo().equals("ABERTO")
+				&& statusAtualizado.getCodigo().equals(statusAnterior.getCodigo())) {
 			throw new VendaStatusAtualException(statusAtualizado.getDescricao());
 		}
 
-		if (statusAtualizado.equals(VendaStatus.APROVADO) && !statusAnterior.equals(VendaStatus.ABERTO)) {
+		if (statusAtualizado.getCodigo().equals("APROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
 			throw new VendaStatusException(statusAtualizado.getAcao());
 		}
 
-		if (statusAtualizado.equals(VendaStatus.REPROVADO) && !statusAnterior.equals(VendaStatus.ABERTO)) {
+		if (statusAtualizado.getCodigo().equals("REPROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
 			throw new VendaStatusException(statusAtualizado.getAcao());
 		}
 
-		if (statusAtualizado.equals(VendaStatus.CONCLUIDO) && !statusAnterior.equals(VendaStatus.APROVADO)) {
+		if (statusAtualizado.getCodigo().equals("CONCLUIDO") && !statusAnterior.getCodigo().equals("APROVADO")) {
 			throw new VendaStatusException(statusAtualizado.getAcao());
 		}
 	}

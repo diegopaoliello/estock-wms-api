@@ -8,20 +8,20 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/login")
 @RequiredArgsConstructor
-public class UsuarioController {
+public class LoginController {
 
 	private final UsuarioService service;
 
-	@PutMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@RequestBody @Validated Usuario usuario) {
-		service.atualizar(usuario);
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public void salvar(@RequestBody @Validated Usuario usuario) {
+		service.salvar(usuario);
 	}
 
-	@GetMapping
-	public Usuario acharUsuario() {
-		return service.acharUsuarioAutenticado();
+	@GetMapping("{email}")
+	public void existePorEmail(@PathVariable String email) {
+		service.existePorEmail(email);
 	}
 }

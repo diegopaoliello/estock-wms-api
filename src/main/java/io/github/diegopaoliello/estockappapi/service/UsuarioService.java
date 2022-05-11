@@ -4,6 +4,8 @@ import io.github.diegopaoliello.estockappapi.exception.UsuarioAutenticadoExcepti
 import io.github.diegopaoliello.estockappapi.exception.UsuarioDiferenteDoAutenticadoException;
 import io.github.diegopaoliello.estockappapi.exception.UniqueException;
 import io.github.diegopaoliello.estockappapi.model.entity.Usuario;
+import io.github.diegopaoliello.estockappapi.model.entity.UsuarioPerfil;
+import io.github.diegopaoliello.estockappapi.model.repository.UsuarioPerfilRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +16,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UsuarioService implements UserDetailsService {
 	@Autowired
 	private UsuarioRepository repository;
+
+	@Autowired
+	private UsuarioPerfilRepository perfilRepository;
 
 	private static String entidade = "Usuário";
 
@@ -30,6 +36,10 @@ public class UsuarioService implements UserDetailsService {
 			if (exists) {
 				throw new UniqueException(entidade);
 			}
+
+			UsuarioPerfil perfil = perfilRepository.findByCodigo("USUARIO");
+
+			usuario.setPerfil(perfil);
 		} catch (UniqueException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -37,11 +47,22 @@ public class UsuarioService implements UserDetailsService {
 		return repository.save(usuario);
 	}
 
+	@Transactional
+	public void atualizar(Usuario usuarioAtualizado) {
+		Integer id = acharUsuarioAutenticado().getId();
+
+		repository.findById(id).map(usuario -> {
+			usuario = usuarioAtualizado;
+			usuario.setId(id);
+			return repository.save(usuario);
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, entidade + " não encontrado"));
+	}
+
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		Usuario usuario = acharPorEmail(userName);
 
-		return User.builder().username(usuario.getEmail()).password(usuario.getSenha()).roles("USER").build();
+		return User.builder().username(usuario.getEmail()).password(usuario.getPassword()).roles("USER").build();
 	}
 
 	public Usuario acharPorId(Integer id) {
@@ -54,11 +75,11 @@ public class UsuarioService implements UserDetailsService {
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, entidade + " não encontrado"));
 	}
 
-	public void existePorNome(String userName) {
-		if (acharPorEmail(userName) == null) {
+	public void existePorEmail(String email) {
+		if (acharPorEmail(email) == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, entidade + " não encontrado");
 		} else {
-			throw new ResponseStatusException(HttpStatus.NO_CONTENT, entidade + " encontrado");
+			throw new ResponseStatusException(HttpStatus.NO_CONTENT);
 		}
 	}
 

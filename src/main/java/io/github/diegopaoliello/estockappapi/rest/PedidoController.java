@@ -1,6 +1,5 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
-import io.github.diegopaoliello.estockappapi.model.entity.PedidoStatus;
 import io.github.diegopaoliello.estockappapi.model.entity.BeforeValidInfo;
 import io.github.diegopaoliello.estockappapi.model.entity.Pedido;
 import io.github.diegopaoliello.estockappapi.service.PedidoService;
@@ -42,7 +41,7 @@ public class PedidoController {
 	public Pedido acharPorId(@PathVariable Integer id) {
 		return service.acharPorId(id);
 	}
-
+	
 	@GetMapping
 	public List<Pedido> listar() {
 		return service.listar();
@@ -51,18 +50,18 @@ public class PedidoController {
 	@PatchMapping("{id}/aprovar")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void aprovar(@PathVariable Integer id) {
-		service.atualizarStatus(id, PedidoStatus.APROVADO);
+		service.atualizarStatus(id, "APROVADO");
 	}
 
 	@PatchMapping("{id}/reprovar")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void reprovar(@PathVariable Integer id) {
-		service.atualizarStatus(id, PedidoStatus.REPROVADO);
+		service.atualizarStatus(id, "REPROVADO");
 	}
 
 	@PatchMapping("{id}/concluir")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void concluir(@PathVariable Integer id) {
-		service.atualizarStatus(id, PedidoStatus.CONCLUIDO);
+		service.atualizarStatus(id, "CONCLUIDO");
 	}
 }

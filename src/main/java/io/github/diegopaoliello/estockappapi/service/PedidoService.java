@@ -6,6 +6,7 @@ import io.github.diegopaoliello.estockappapi.model.entity.Pedido;
 import io.github.diegopaoliello.estockappapi.model.entity.PedidoItem;
 import io.github.diegopaoliello.estockappapi.model.entity.PedidoStatus;
 import io.github.diegopaoliello.estockappapi.model.repository.PedidoRepository;
+import io.github.diegopaoliello.estockappapi.model.repository.PedidoStatusRepository;
 
 import java.util.List;
 
@@ -23,6 +24,9 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	@Autowired
 	private EstoqueEntradaService entradaEstoqueService;
 
+	@Autowired
+	PedidoStatusRepository pedidoStatusRepository;
+
 	private Boolean isAprovandoPedido = false;
 
 	public PedidoService() {
@@ -32,7 +36,9 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	@Override
 	public Pedido salvar(Pedido pedido) {
 		try {
-			pedido.setStatus(PedidoStatus.ABERTO);
+			PedidoStatus status = pedidoStatusRepository.findByCodigo("ABERTO");
+
+			pedido.setStatus(status);
 
 			pedido = super.salvar(pedido);
 		} catch (Exception e) {
@@ -71,9 +77,10 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	}
 
 	@Transactional
-	public void atualizarStatus(Integer id, PedidoStatus statusAtualizado) {
+	public void atualizarStatus(Integer id, String status) {
 		try {
 			Pedido pedido = acharPorId(id);
+			PedidoStatus statusAtualizado = pedidoStatusRepository.findByCodigo(status);
 
 			permiteAlterarStatus(pedido.getStatus(), statusAtualizado);
 			isAprovandoPedido = isAprovandoPedido(pedido.getStatus(), statusAtualizado);
@@ -93,23 +100,24 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	}
 
 	private boolean isAprovandoPedido(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
-		return (statusAnterior == PedidoStatus.APROVADO && statusAtualizado == PedidoStatus.CONCLUIDO);
+		return (statusAnterior.getCodigo() == "APROVADO" && statusAnterior.getCodigo() == "CONCLUIDO");
 	}
 
 	private void permiteAlterarStatus(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
-		if (!statusAtualizado.equals(PedidoStatus.ABERTO) && statusAtualizado.equals(statusAnterior)) {
+		if (!statusAtualizado.getCodigo().equals("ABERTO")
+				&& statusAtualizado.getCodigo().equals(statusAnterior.getCodigo())) {
 			throw new PedidoStatusAtualException(statusAtualizado.getDescricao());
 		}
 
-		if (statusAtualizado.equals(PedidoStatus.APROVADO) && !statusAnterior.equals(PedidoStatus.ABERTO)) {
+		if (statusAtualizado.getCodigo().equals("APROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
 			throw new PedidoStatusException(statusAtualizado.getAcao());
 		}
 
-		if (statusAtualizado.equals(PedidoStatus.REPROVADO) && !statusAnterior.equals(PedidoStatus.ABERTO)) {
+		if (statusAtualizado.getCodigo().equals("REPROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
 			throw new PedidoStatusException(statusAtualizado.getAcao());
 		}
 
-		if (statusAtualizado.equals(PedidoStatus.CONCLUIDO) && !statusAnterior.equals(PedidoStatus.APROVADO)) {
+		if (statusAtualizado.getCodigo().equals("CONCLUIDO") && !statusAnterior.getCodigo().equals("APROVADO")) {
 			throw new PedidoStatusException(statusAtualizado.getAcao());
 		}
 	}

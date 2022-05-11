@@ -1,6 +1,5 @@
 package io.github.diegopaoliello.estockappapi.rest;
 
-import io.github.diegopaoliello.estockappapi.model.entity.VendaStatus;
 import io.github.diegopaoliello.estockappapi.model.entity.BeforeValidInfo;
 import io.github.diegopaoliello.estockappapi.model.entity.Venda;
 import io.github.diegopaoliello.estockappapi.service.VendaService;
@@ -51,18 +50,18 @@ public class VendaController {
 	@PatchMapping("{id}/aprovar")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void aprovar(@PathVariable Integer id) {
-		service.atualizarStatus(id, VendaStatus.APROVADO);
+		service.atualizarStatus(id, "APROVADO");
 	}
 
 	@PatchMapping("{id}/reprovar")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void reprovar(@PathVariable Integer id) {
-		service.atualizarStatus(id, VendaStatus.REPROVADO);
+		service.atualizarStatus(id,"REPROVADO");
 	}
 
 	@PatchMapping("{id}/concluir")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void concluir(@PathVariable Integer id) {
-		service.atualizarStatus(id, VendaStatus.CONCLUIDO);
+		service.atualizarStatus(id, "CONCLUIDO");
 	}
 }

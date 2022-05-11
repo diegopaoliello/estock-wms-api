@@ -14,9 +14,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "codigo", name = "venda_status_codigo_uk"))
-@Check(constraints = "codigo IN ('ABERTO', 'APROVADO', 'REPROVADO', 'CONCLUIDO')")
-public class VendaStatus {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "codigo", name = "usuario_tipo_login_codigo_uk"))
+@Check(constraints = "codigo IN ('PADRAO', 'GOOGLE')")
+public class UsuarioTipoLogin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@GenericGenerator(name = "increment", strategy = "increment")
@@ -30,23 +30,4 @@ public class VendaStatus {
 	@NotNull(groups = BeforeValidInfo.class, message = "{campo.descricao.obrigatorio}")
 	private String descricao;
 
-	public String getAcao() {
-		String acao = null;
-
-		switch (this.codigo) {
-		case "APROVADO":
-			acao = "aprovar";
-			break;
-		case "REPROVADO":
-			acao = "reprovar";
-			break;
-		case "CONCLUIDO":
-			acao = "concluir";
-			break;
-
-		default:
-			break;
-		}
-		return acao;
-	}
 }
