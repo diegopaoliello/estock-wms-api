@@ -34,7 +34,6 @@ public class PedidoItemService extends AbstractService<PedidoItem, PedidoItemRep
 	@Override
 	public PedidoItem salvar(PedidoItem itemPedido) {
 		try {
-			preencheValoresAusentes(itemPedido);
 			valida(itemPedido);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -46,7 +45,6 @@ public class PedidoItemService extends AbstractService<PedidoItem, PedidoItemRep
 	@Override
 	public void atualizar(Integer id, PedidoItem itemPedido) {
 		try {
-			preencheValoresAusentes(itemPedido);
 			valida(itemPedido);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -85,14 +83,9 @@ public class PedidoItemService extends AbstractService<PedidoItem, PedidoItemRep
 		BigDecimal quantidadeProdutos = estoqueProduto.getQuantidade().add(itemPedido.getQuantidade())
 				.add(quantidadeProdutosAberto);
 
-		if (quantidadeProdutos.compareTo(produto.getQuantidadeMaxima()) == 1) {
+		if (produto.getQuantidadeMaxima().compareTo(BigDecimal.ZERO) == 1
+				&& quantidadeProdutos.compareTo(produto.getQuantidadeMaxima()) == 1) {
 			throw new ProdutoQtdeMax(produto.getQuantidadeMaxima().toString());
-		}
-	}
-
-	private void preencheValoresAusentes(PedidoItem itemPedido) {
-		if (itemPedido.getQuantidade() == null) {
-			itemPedido.setQuantidade(BigDecimal.ZERO);
 		}
 	}
 }

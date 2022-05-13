@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/estoque-entrada")
+@RequestMapping("/entradas-estoque")
 public class EstoqueEntradaController {
 
 	@Autowired
@@ -19,25 +19,8 @@ public class EstoqueEntradaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public EstoqueEntrada salvar(@RequestBody @Validated EstoqueEntrada categoria) {
-		return service.salvar(categoria);
-	}
-
-	@DeleteMapping("{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deletar(@PathVariable Integer id) {
-		service.deletar(id);
-	}
-
-	@PutMapping("{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable Integer id, @RequestBody @Validated EstoqueEntrada categoria) {
-		service.atualizar(id, categoria);
-	}
-
-	@GetMapping("{id}")
-	public EstoqueEntrada acharPorId(@PathVariable Integer id) {
-		return service.acharPorId(id);
+	public EstoqueEntrada salvar(@RequestBody @Validated EstoqueEntrada entrada) {
+		return service.salvar(entrada);
 	}
 
 	@GetMapping

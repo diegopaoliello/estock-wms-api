@@ -65,9 +65,9 @@ public class VendaItemService extends AbstractService<VendaItem, VendaItemReposi
 
 	private void valida(VendaItem itemVenda) {
 		Produto produto = produtoService.acharPorId(itemVenda.getProduto().getId());
-		BigDecimal precoMedio = produtoService.calcularPrecoMedio(produto);
+		BigDecimal precoMedio = produto.getPrecoMedio();
 
-		if (itemVenda.calcularValorFinal().compareTo(precoMedio) == -1) {
+		if (itemVenda.calcularValorFinal().compareTo(produto.getPrecoMedio()) == -1) {
 			throw new ProdutoAbaixoPrecoMedio(precoMedio.toString());
 		}
 

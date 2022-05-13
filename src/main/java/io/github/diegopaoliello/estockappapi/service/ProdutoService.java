@@ -34,7 +34,6 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 	@Override
 	public Produto salvar(Produto produto) {
 		try {
-			preencheValoresAusentes(produto);
 			valida(null, produto);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -47,7 +46,6 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 	public void atualizar(Integer id, Produto produto) {
 		try {
 			produto.setId(id);
-			preencheValoresAusentes(produto);
 			valida(id, produto);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -104,15 +102,4 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 			throw new UniqueException(entidade);
 		}
 	}
-
-	private void preencheValoresAusentes(Produto produto) {
-		if (produto.getQuantidadeMinima() == null) {
-			produto.setQuantidadeMinima(BigDecimal.ZERO);
-		}
-
-		if (produto.getQuantidadeMaxima() == null) {
-			produto.setQuantidadeMaxima(BigDecimal.ZERO);
-		}
-	}
-
 }

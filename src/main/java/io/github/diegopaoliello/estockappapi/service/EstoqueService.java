@@ -28,10 +28,9 @@ public class EstoqueService extends AbstractService<Estoque, EstoqueRepository> 
 	}
 
 	public Estoque entrada(EstoqueEntrada estoqueEntrada) {
-		PedidoItem pedidoItem = pedidoItemService.acharPorId(estoqueEntrada.getItemPedido().getId());
-		Produto produto = pedidoItem.getProduto();
+		Produto produto = estoqueEntrada.getProduto();
 		Estoque estoqueProduto = super.repository.findByProduto(produto).map(estoque -> estoque).orElse(new Estoque());
-		BigDecimal quantidade = estoqueProduto.getQuantidade().add(pedidoItem.getQuantidade());
+		BigDecimal quantidade = estoqueProduto.getQuantidade().add(estoqueEntrada.getQuantidade());
 
 		estoqueProduto.setProduto(produto);
 		estoqueProduto.setQuantidade(quantidade);

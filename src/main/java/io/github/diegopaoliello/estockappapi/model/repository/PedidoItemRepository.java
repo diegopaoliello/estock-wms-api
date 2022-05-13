@@ -21,6 +21,6 @@ public interface PedidoItemRepository extends JpaRepository<PedidoItem, Integer>
 
 	Optional<PedidoItem> findByPedidoAndProduto(Pedido pedido, Produto produto);
 
-	@Query("select pi from PedidoItem pi INNER JOIN pi.pedido p where p.id <> :idPedido AND pi.produto.id = :idProduto AND p.status='ABERTO'")
+	@Query("select pi from PedidoItem pi INNER JOIN pi.pedido p where p.id <> :idPedido AND pi.produto.id = :idProduto AND p.status.codigo ='ABERTO'")
 	Optional<List<PedidoItem>> findByProdutoAndStatusEqualAberto(@Param("idPedido") Integer idPedido, @Param("idProduto") Integer idProduto);
 }

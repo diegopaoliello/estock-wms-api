@@ -100,7 +100,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	}
 
 	private boolean isAprovandoPedido(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
-		return (statusAnterior.getCodigo() == "APROVADO" && statusAnterior.getCodigo() == "CONCLUIDO");
+		return (statusAnterior.getCodigo().equals("APROVADO")  && statusAtualizado.getCodigo().equals("CONCLUIDO"));
 	}
 
 	private void permiteAlterarStatus(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {

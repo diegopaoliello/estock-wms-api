@@ -100,7 +100,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 	}
 
 	private boolean isAprovandoVenda(VendaStatus statusAnterior, VendaStatus statusAtualizado) {
-		return (statusAnterior.getCodigo() == "APROVADO" && statusAnterior.getCodigo() == "CONCLUIDO");
+		return (statusAnterior.getCodigo().equals("APROVADO") && statusAtualizado.getCodigo().equals("CONCLUIDO"));
 	}
 
 	private void permiteAlterarStatus(VendaStatus statusAnterior, VendaStatus statusAtualizado) {

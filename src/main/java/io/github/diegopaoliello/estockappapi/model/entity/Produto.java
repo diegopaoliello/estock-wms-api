@@ -26,11 +26,13 @@ public class Produto extends AbstractEntity {
 
 	@Column(nullable = false, length = 50, unique = true)
 	@NotEmpty(message = "{campo.codigo.obrigatorio}")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String codigo;
 
 	@ManyToOne
 	@NotNull(message = "{campo.categoria.obrigatorio}")
 	@JoinColumn(name = "id_categoria", nullable = false, foreignKey = @ForeignKey(name = "produto_categoria_fk"))
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Categoria categoria;
 
 	@ManyToOne
@@ -40,10 +42,10 @@ public class Produto extends AbstractEntity {
 	private UnidadeMedida unidadeMedida;
 
 	@Column
-	private BigDecimal quantidadeMinima = BigDecimal.ZERO;
+	private BigDecimal quantidadeMinima;
 
 	@Column
-	private BigDecimal quantidadeMaxima = BigDecimal.ZERO;
+	private BigDecimal quantidadeMaxima;
 
 	@Column(nullable = false)
 	@NotNull(groups = AfterValidInfo.class, message = "{campo.preco_medio.obrigatorio}")

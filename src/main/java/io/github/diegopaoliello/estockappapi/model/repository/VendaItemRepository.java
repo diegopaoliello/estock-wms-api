@@ -21,7 +21,7 @@ public interface VendaItemRepository extends JpaRepository<VendaItem, Integer> {
 
 	Optional<VendaItem> findByVendaAndProduto(Venda venda, Produto produto);
 
-	@Query("select vi from VendaItem vi INNER JOIN vi.venda v where v.id <> :idVenda AND vi.produto.id = :idProduto AND v.status='ABERTO'")
+	@Query("select vi from VendaItem vi INNER JOIN vi.venda v where v.id <> :idVenda AND vi.produto.id = :idProduto AND v.status.codigo ='ABERTO'")
 	Optional<List<VendaItem>> findByProdutoAndStatusEqualAberto(@Param("idVenda") Integer idVenda,
 			@Param("idProduto") Integer idProduto);
 }

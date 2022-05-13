@@ -4,6 +4,8 @@ import io.github.diegopaoliello.estockappapi.model.entity.EstoqueSaida;
 import io.github.diegopaoliello.estockappapi.model.entity.VendaItem;
 import io.github.diegopaoliello.estockappapi.model.repository.EstoqueSaidaRepository;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class EstoqueSaidaService extends AbstractService<EstoqueSaida, EstoqueSa
 		super("Saída de Estoque");
 	}
 
+	@Transactional
 	public EstoqueSaida gerar(VendaItem itemVenda) {
 		EstoqueSaida saidaEstoque = new EstoqueSaida();
 		saidaEstoque.setItemVenda(itemVenda);
