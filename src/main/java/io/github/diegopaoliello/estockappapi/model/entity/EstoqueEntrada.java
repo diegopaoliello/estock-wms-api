@@ -42,5 +42,5 @@ public class EstoqueEntrada extends AbstractEntity {
 
 	@Column
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private String observacao;
+	private String justificativa;
 }
