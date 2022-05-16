@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -51,7 +50,7 @@ public class Usuario {
 	@NotNull(groups = BeforeValidInfo.class, message = "{campo.tipo_login.obrigatorio}")
 	@JoinColumn(name = "id_tipo_login", nullable = false, foreignKey = @ForeignKey(name = "usuario_tipo_login_fk"))
 	private UsuarioTipoLogin tipoLogin;
-
+		
 	@Column(nullable = false, name = "data_cadastro", updatable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy:HH:mm")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
@@ -61,7 +60,7 @@ public class Usuario {
 	@JsonFormat(pattern = "dd/MM/yyyy:HH:mm")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private LocalDateTime dataAtualizacao;
-
+	
 	@PrePersist
 	public void beforeSave() {
 		setDataCadastro(LocalDateTime.now());
