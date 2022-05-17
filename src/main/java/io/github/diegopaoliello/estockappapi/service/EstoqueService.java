@@ -3,7 +3,6 @@ package io.github.diegopaoliello.estockappapi.service;
 import io.github.diegopaoliello.estockappapi.model.entity.Estoque;
 import io.github.diegopaoliello.estockappapi.model.entity.EstoqueEntrada;
 import io.github.diegopaoliello.estockappapi.model.entity.EstoqueSaida;
-import io.github.diegopaoliello.estockappapi.model.entity.PedidoItem;
 import io.github.diegopaoliello.estockappapi.model.entity.Produto;
 import io.github.diegopaoliello.estockappapi.model.entity.VendaItem;
 import io.github.diegopaoliello.estockappapi.model.repository.EstoqueRepository;
@@ -17,9 +16,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EstoqueService extends AbstractService<Estoque, EstoqueRepository> {
-	@Autowired
-	private PedidoItemService pedidoItemService;
-
 	@Autowired
 	private VendaItemService vendaItemService;
 

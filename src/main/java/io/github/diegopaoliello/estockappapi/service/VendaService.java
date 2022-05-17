@@ -49,6 +49,7 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 	}
 
 	@Override
+	@Transactional
 	public void atualizar(Integer id, Venda vendaAtualizado) {
 		VendaStatus statusAtualizado = vendaAtualizado.getStatus();
 

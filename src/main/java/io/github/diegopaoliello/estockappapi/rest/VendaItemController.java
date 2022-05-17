@@ -35,19 +35,24 @@ public class VendaItemController {
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void atualizar(@PathVariable Integer id,
-			@RequestBody @Validated(BeforeValidInfo.class) VendaItem itemVenda) {
+	public void atualizar(@PathVariable(value = "id") Integer id,
+			@RequestBody @Validated(BeforeValidInfo.class) VendaItem itemVenda,
+			@PathVariable(value = "idVenda") Integer idVenda) {
+		Venda venda = vendaService.acharPorId(idVenda);
+		itemVenda.setId(id);
+		itemVenda.setVenda(venda);
+		
 		service.atualizar(id, itemVenda);
 	}
 
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deletar(@PathVariable Integer id) {
+	public void deletar(@PathVariable(value = "id") Integer id) {
 		service.deletar(id);
 	}
 
 	@GetMapping("{id}")
-	public VendaItem acharPorId(@PathVariable Integer id) {
+	public VendaItem acharPorId(@PathVariable(value = "id") Integer id) {
 		return service.acharPorId(id);
 	}
 

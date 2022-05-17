@@ -8,7 +8,9 @@ import io.github.diegopaoliello.estockappapi.model.repository.EstoqueEntradaRepo
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class EstoqueEntradaService extends AbstractService<EstoqueEntrada, EstoqueEntradaRepository> {
@@ -24,12 +26,17 @@ public class EstoqueEntradaService extends AbstractService<EstoqueEntrada, Estoq
 
 	@Override
 	@Transactional
-	public EstoqueEntrada salvar(EstoqueEntrada entrada) {
-		estoqueService.entrada(entrada);
-		return super.salvar(entrada);
+	public EstoqueEntrada salvar(EstoqueEntrada entradaEstoque) {
+		try {
+			estoqueService.entrada(entradaEstoque);
+			produtoService.atualizarPrecoMedio(entradaEstoque.getProduto());
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+
+		return super.salvar(entradaEstoque);
 	}
 
-	@Transactional
 	public EstoqueEntrada gerar(PedidoItem itemPedido) {
 		EstoqueEntrada entradaEstoque = new EstoqueEntrada();
 		Produto produto = itemPedido.getProduto();
@@ -39,12 +46,6 @@ public class EstoqueEntradaService extends AbstractService<EstoqueEntrada, Estoq
 		entradaEstoque.setPreco(itemPedido.getValorFinal());
 		entradaEstoque.setQuantidade(itemPedido.getQuantidade());
 
-		entradaEstoque = super.salvar(entradaEstoque);
-
-		estoqueService.entrada(entradaEstoque);
-
-		produtoService.atualizarPrecoMedio(produto);
-
-		return entradaEstoque;
+		return salvar(entradaEstoque);
 	}
 }

@@ -72,6 +72,7 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 			precoMedio = valorTotal.divide(quantidadeTotal, 2, RoundingMode.HALF_UP);
 		}
 
+
 		return precoMedio;
 	}
 

@@ -8,6 +8,6 @@ public class VendaStatusAtualException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public VendaStatusAtualException(String status) {
-		super("Pedido já está " + status);
+		super("Venda já está " + status);
 	}
 }

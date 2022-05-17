@@ -49,6 +49,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	}
 
 	@Override
+	@Transactional
 	public void atualizar(Integer id, Pedido pedidoAtualizado) {
 		PedidoStatus statusAtualizado = pedidoAtualizado.getStatus();
 

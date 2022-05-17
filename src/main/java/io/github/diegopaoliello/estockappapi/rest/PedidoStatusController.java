@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pedido-status")
+@RequestMapping("/pedidos-status")
 public class PedidoStatusController {
 
 	@Autowired
