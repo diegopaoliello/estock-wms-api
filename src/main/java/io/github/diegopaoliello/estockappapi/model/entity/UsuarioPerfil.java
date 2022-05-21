@@ -20,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "codigo", name = "usuario_perfil_codigo_uk"))
-@Check(constraints = "codigo IN ('USUARIO', 'COMPRADOR', 'VENDEDOR', 'OPERADOR', 'GERENTE')")
+@Check(constraints = "codigo IN ('USUARIO', 'ADMINISTRADOR', 'OPERADOR', 'GERENTE')")
 public class UsuarioPerfil {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,53 +41,49 @@ public class UsuarioPerfil {
 
 	@Transient
 	@Setter(AccessLevel.NONE)
-	private List<UsuarioPerfilAutorizacao> autorizacoes;
-
-	public boolean isPermiteInserirEntradaEstoque() {
-		if (this.codigo.equals("GERENTE")) {
-			this.permiteInserirEntradaEstoque = true;
-		} else {
-			this.permiteInserirEntradaEstoque = false;
-		}
-
-		return this.permiteInserirEntradaEstoque;
-	}
+	private List<UsuarioPerfilAutorizacao> autorizacoes = new ArrayList<UsuarioPerfilAutorizacao>();
 
 	public List<UsuarioPerfilAutorizacao> getAutorizacoes() {
-		List<UsuarioPerfilAutorizacao> autorizacoes = new ArrayList<UsuarioPerfilAutorizacao>();
-		UsuarioPerfilAutorizacao autorizacao;
-
 		if (!this.codigo.equals("USUARIO")) {
-			autorizacao = new UsuarioPerfilAutorizacao("MENU_PRINCIPAL", Arrays.asList("VISUALIZAR"));
-			autorizacoes.add(autorizacao);
+			setAutorizacoes("MENU_PRINCIPAL", Arrays.asList("VISUALIZAR"));
 
-			if (!this.codigo.equals("OPERADOR")) {
-				autorizacao = new UsuarioPerfilAutorizacao("MENU_CADASTROS",
-						Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
-				autorizacoes.add(autorizacao);
-
-				autorizacao = new UsuarioPerfilAutorizacao("MENU_OPER_ENTRADA",
-						Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
-				autorizacoes.add(autorizacao);
-
-				autorizacao = new UsuarioPerfilAutorizacao("MENU_OPER_SAIDA",
-						Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
-				autorizacoes.add(autorizacao);
-			} else {
-				autorizacao = new UsuarioPerfilAutorizacao("MENU_OPER_ENTRADA", Arrays.asList("VISUALIZAR"));
-				autorizacoes.add(autorizacao);
-
-				autorizacao = new UsuarioPerfilAutorizacao("MENU_OPER_SAIDA", Arrays.asList("VISUALIZAR"));
-				autorizacoes.add(autorizacao);
+			if (this.codigo.equals("ADMINISTRADOR")) {
+				setAutorizacoes("CADASTRO", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
+				setAutorizacoes("PEDIDO", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
+				setAutorizacoes("PEDIDO_STATUS", Arrays.asList("CONCLUIR"));
+				setAutorizacoes("VENDA", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
+				setAutorizacoes("ESTOQUE", Arrays.asList("VISUALIZAR"));
+				setAutorizacoes("ESTOQUE_ENTRADA", Arrays.asList("VISUALIZAR"));
+				setAutorizacoes("ESTOQUE_SAIDA", Arrays.asList("VISUALIZAR"));
 			}
 
 			if (this.codigo.equals("GERENTE")) {
-				autorizacao = new UsuarioPerfilAutorizacao("ENTRADA_ESTOQUE", Arrays.asList("INSERIR", "VISUALIZAR"));
-				autorizacoes.add(autorizacao);
+				setAutorizacoes("CADASTRO", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
+				setAutorizacoes("PEDIDO", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
+				setAutorizacoes("PEDIDO_STATUS", Arrays.asList("APROVAR", "CONCLUIR"));
+				setAutorizacoes("VENDA", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
+				setAutorizacoes("ESTOQUE", Arrays.asList("VISUALIZAR"));
+				setAutorizacoes("ESTOQUE_ENTRADA", Arrays.asList("INSERIR", "VISUALIZAR"));
+				setAutorizacoes("ESTOQUE_SAIDA", Arrays.asList("VISUALIZAR"));
+			}
+
+			if (this.codigo.equals("OPERADOR")) {
+				setAutorizacoes("PEDIDO", Arrays.asList("EDITAR", "VISUALIZAR"));
+				setAutorizacoes("PEDIDO_STATUS", Arrays.asList("CONCLUIR"));
+				setAutorizacoes("VENDA", Arrays.asList("EDITAR", "VISUALIZAR"));
+				setAutorizacoes("ESTOQUE", Arrays.asList("VISUALIZAR"));
+				setAutorizacoes("ESTOQUE_ENTRADA", Arrays.asList("VISUALIZAR"));
+				setAutorizacoes("ESTOQUE_SAIDA", Arrays.asList("VISUALIZAR"));
 			}
 		}
 
-		return autorizacoes;
+		return this.autorizacoes;
+	}
+
+	private void setAutorizacoes(String nomeAutorizacao, List<String> acoes) {
+		UsuarioPerfilAutorizacao autorizacao;
+		autorizacao = new UsuarioPerfilAutorizacao(nomeAutorizacao, acoes);
+		this.autorizacoes.add(autorizacao);
 	}
 
 }
