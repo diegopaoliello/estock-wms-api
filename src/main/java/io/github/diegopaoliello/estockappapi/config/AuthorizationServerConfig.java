@@ -43,7 +43,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("my-angular-app").secret("@321").scopes("read", "write")
+		clients.inMemory().withClient("estock-app").secret("#estock2022").scopes("read", "write")
 				.authorizedGrantTypes("password").accessTokenValiditySeconds(1800);
 	}
 }

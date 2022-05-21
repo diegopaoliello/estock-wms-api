@@ -45,13 +45,13 @@ public class UsuarioPerfil {
 
 	public List<UsuarioPerfilAutorizacao> getAutorizacoes() {
 		if (!this.codigo.equals("USUARIO")) {
-			setAutorizacoes("MENU_PRINCIPAL", Arrays.asList("VISUALIZAR"));
 
 			if (this.codigo.equals("ADMINISTRADOR")) {
 				setAutorizacoes("CADASTRO", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
 				setAutorizacoes("PEDIDO", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
 				setAutorizacoes("PEDIDO_STATUS", Arrays.asList("CONCLUIR"));
 				setAutorizacoes("VENDA", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
+				setAutorizacoes("VENDA_STATUS", Arrays.asList("CONCLUIR"));
 				setAutorizacoes("ESTOQUE", Arrays.asList("VISUALIZAR"));
 				setAutorizacoes("ESTOQUE_ENTRADA", Arrays.asList("VISUALIZAR"));
 				setAutorizacoes("ESTOQUE_SAIDA", Arrays.asList("VISUALIZAR"));
@@ -62,6 +62,7 @@ public class UsuarioPerfil {
 				setAutorizacoes("PEDIDO", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
 				setAutorizacoes("PEDIDO_STATUS", Arrays.asList("APROVAR", "CONCLUIR"));
 				setAutorizacoes("VENDA", Arrays.asList("INSERIR", "EDITAR", "EXCLUIR", "VISUALIZAR"));
+				setAutorizacoes("VENDA_STATUS", Arrays.asList("APROVAR", "CONCLUIR"));
 				setAutorizacoes("ESTOQUE", Arrays.asList("VISUALIZAR"));
 				setAutorizacoes("ESTOQUE_ENTRADA", Arrays.asList("INSERIR", "VISUALIZAR"));
 				setAutorizacoes("ESTOQUE_SAIDA", Arrays.asList("VISUALIZAR"));
@@ -71,6 +72,7 @@ public class UsuarioPerfil {
 				setAutorizacoes("PEDIDO", Arrays.asList("EDITAR", "VISUALIZAR"));
 				setAutorizacoes("PEDIDO_STATUS", Arrays.asList("CONCLUIR"));
 				setAutorizacoes("VENDA", Arrays.asList("EDITAR", "VISUALIZAR"));
+				setAutorizacoes("VENDA_STATUS", Arrays.asList("CONCLUIR"));
 				setAutorizacoes("ESTOQUE", Arrays.asList("VISUALIZAR"));
 				setAutorizacoes("ESTOQUE_ENTRADA", Arrays.asList("VISUALIZAR"));
 				setAutorizacoes("ESTOQUE_SAIDA", Arrays.asList("VISUALIZAR"));

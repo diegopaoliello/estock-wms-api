@@ -11,7 +11,7 @@ https://api-estock.herokuapp.com/api/usuarios
 
 ```json
 {
-    "username": "user",
+    "username": "user@estock.com",
     "password": 123
 }
 ````
@@ -23,8 +23,8 @@ https://api-estock.herokuapp.com/api/oauth/token
 
 **Authorization**
 
-1. **User:** my-angular-app
-2. **Password:** @321
+1. **User:** estock-app
+2. **Password:** #estock2022
 
 **Body**: x-www-form-urlencoded
 
