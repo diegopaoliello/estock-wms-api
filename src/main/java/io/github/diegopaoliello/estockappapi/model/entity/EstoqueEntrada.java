@@ -25,7 +25,7 @@ public class EstoqueEntrada extends AbstractEntity {
 	private PedidoItem itemPedido;
 
 	@ManyToOne
-	@JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "pedido_item_produto_fk"))
+	@JoinColumn(name = "id_produto", nullable = false, foreignKey = @ForeignKey(name = "estoque_entrada_produto_fk"))
 	@NotNull(groups = BeforeValidInfo.class, message = "{campo.produto.obrigatorio}")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Produto produto;

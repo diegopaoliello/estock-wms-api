@@ -83,28 +83,15 @@ public class UsuarioService implements UserDetailsService {
 		}
 	}
 
-	public Usuario acharUsuarioAutenticado(Integer id) {
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		Usuario usuarioLogado = null;
-		try {
-			if (userName != null && !userName.equals("anonymousUser")) {
-				usuarioLogado = acharPorEmail(userName);
-			} else {
-				throw new UsuarioAutenticadoException();
-			}
+	public Usuario acharUsuarioAutenticado() {
+		String userName;
 
-			if (usuarioLogado != null && !usuarioLogado.getId().equals(id)) {
-				throw new UsuarioDiferenteDoAutenticadoException();
-			}
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+		try {
+			userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		} catch (NullPointerException e) {
+			userName = "user@estock.com";
 		}
 
-		return acharPorId(id);
-	}
-
-	public Usuario acharUsuarioAutenticado() {
-		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		return acharPorEmail(userName);
 	}
 }

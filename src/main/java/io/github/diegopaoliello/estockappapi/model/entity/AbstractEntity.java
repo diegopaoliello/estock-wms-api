@@ -33,7 +33,7 @@ public abstract class AbstractEntity {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "id_usuario", nullable = false, foreignKey = @ForeignKey(name = "usuario_fk"))
+	@JoinColumn(name = "id_usuario", nullable = false)
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonBackReference
 	private Usuario usuario;

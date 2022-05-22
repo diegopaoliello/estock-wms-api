@@ -37,10 +37,6 @@ public class UsuarioPerfil {
 
 	@Transient
 	@Setter(AccessLevel.NONE)
-	private boolean permiteInserirEntradaEstoque = false;
-
-	@Transient
-	@Setter(AccessLevel.NONE)
 	private List<UsuarioPerfilAutorizacao> autorizacoes = new ArrayList<UsuarioPerfilAutorizacao>();
 
 	public List<UsuarioPerfilAutorizacao> getAutorizacoes() {
@@ -69,9 +65,9 @@ public class UsuarioPerfil {
 			}
 
 			if (this.codigo.equals("OPERADOR")) {
-				setAutorizacoes("PEDIDO", Arrays.asList("EDITAR", "VISUALIZAR"));
+				setAutorizacoes("PEDIDO", Arrays.asList("VISUALIZAR"));
 				setAutorizacoes("PEDIDO_STATUS", Arrays.asList("CONCLUIR"));
-				setAutorizacoes("VENDA", Arrays.asList("EDITAR", "VISUALIZAR"));
+				setAutorizacoes("VENDA", Arrays.asList("VISUALIZAR"));
 				setAutorizacoes("VENDA_STATUS", Arrays.asList("CONCLUIR"));
 				setAutorizacoes("ESTOQUE", Arrays.asList("VISUALIZAR"));
 				setAutorizacoes("ESTOQUE_ENTRADA", Arrays.asList("VISUALIZAR"));
