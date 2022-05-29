@@ -6,6 +6,7 @@ import io.github.diegopaoliello.estockappapi.service.ProdutoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
+@Secured({ "ADMINISTRADOR", "GERENTE" })
 public class ProdutoController {
 
 	@Autowired

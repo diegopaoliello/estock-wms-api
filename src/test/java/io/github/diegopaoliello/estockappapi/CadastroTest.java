@@ -19,14 +19,14 @@ class CadastroTest {
 	@Test()
 	void unidadeMedidaDuplicadaException() {
 		ResponseStatusException thrown = Assertions.assertThrows(ResponseStatusException.class, () -> {
-			unidadeMedidaService.salvar(new UnidadeMedida("KG", "Kilograma"));
-			unidadeMedidaService.salvar(new UnidadeMedida("KG", "Kilograma"));
+			unidadeMedidaService.salvar(new UnidadeMedida("Unidade Medida Um", "TST"));
+			unidadeMedidaService.salvar(new UnidadeMedida("Unidade Medida Um", "TST"));
 
 		}, "ResponseStatusException deve ocorrer");
 
 		Assertions.assertTrue(thrown.getMessage().contains("Unidade de Medida já existente"));
 	}
-	
+
 	@Test()
 	void unidadeMedidaDuplicadaDoisException() {
 		ResponseStatusException thrown = Assertions.assertThrows(ResponseStatusException.class, () -> {

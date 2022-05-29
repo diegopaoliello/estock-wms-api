@@ -4,12 +4,14 @@ import io.github.diegopaoliello.estockappapi.model.entity.EstoqueSaida;
 import io.github.diegopaoliello.estockappapi.service.EstoqueSaidaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/saidas-estoque")
+@Secured({ "ADMINISTRADOR", "GERENTE", "OPERADOR" })
 public class EstoqueSaidaController {
 	@Autowired
 	private EstoqueSaidaService service;

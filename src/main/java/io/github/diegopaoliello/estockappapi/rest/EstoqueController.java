@@ -4,6 +4,7 @@ import io.github.diegopaoliello.estockappapi.model.entity.Estoque;
 import io.github.diegopaoliello.estockappapi.service.EstoqueService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estoques")
+@Secured({ "ADMINISTRADOR", "GERENTE", "OPERADOR" })
 public class EstoqueController {
 	@Autowired
 	private EstoqueService service;

@@ -1,7 +1,5 @@
 package io.github.diegopaoliello.estockappapi.service;
 
-import io.github.diegopaoliello.estockappapi.exception.UsuarioAutenticadoException;
-import io.github.diegopaoliello.estockappapi.exception.UsuarioDiferenteDoAutenticadoException;
 import io.github.diegopaoliello.estockappapi.exception.UniqueException;
 import io.github.diegopaoliello.estockappapi.model.entity.Usuario;
 import io.github.diegopaoliello.estockappapi.model.entity.UsuarioPerfil;
@@ -62,7 +60,8 @@ public class UsuarioService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		Usuario usuario = acharPorEmail(userName);
 
-		return User.builder().username(usuario.getEmail()).password(usuario.getPassword()).roles("USER").build();
+		return User.builder().username(usuario.getEmail()).password(usuario.getPassword())
+				.authorities(usuario.getPerfil().getCodigo()).build();
 	}
 
 	public Usuario acharPorId(Integer id) {

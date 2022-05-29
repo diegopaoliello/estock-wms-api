@@ -8,6 +8,7 @@ import io.github.diegopaoliello.estockappapi.service.VendaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class VendaItemController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@Secured({ "ADMINISTRADOR", "GERENTE" })
 	public VendaItem salvar(@PathVariable(value = "idVenda") Integer idVenda,
 			@RequestBody @Validated(BeforeValidInfo.class) VendaItem itemVenda) {
 		Venda venda = vendaService.acharPorId(idVenda);
@@ -35,28 +37,32 @@ public class VendaItemController {
 
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Secured({ "ADMINISTRADOR", "GERENTE" })
 	public void atualizar(@PathVariable(value = "id") Integer id,
 			@RequestBody @Validated(BeforeValidInfo.class) VendaItem itemVenda,
 			@PathVariable(value = "idVenda") Integer idVenda) {
 		Venda venda = vendaService.acharPorId(idVenda);
 		itemVenda.setId(id);
 		itemVenda.setVenda(venda);
-		
+
 		service.atualizar(id, itemVenda);
 	}
 
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Secured({ "ADMINISTRADOR", "GERENTE" })
 	public void deletar(@PathVariable(value = "id") Integer id) {
 		service.deletar(id);
 	}
 
 	@GetMapping("{id}")
+	@Secured({ "ADMINISTRADOR", "GERENTE" })
 	public VendaItem acharPorId(@PathVariable(value = "id") Integer id) {
 		return service.acharPorId(id);
 	}
 
 	@GetMapping
+	@Secured({ "ADMINISTRADOR", "GERENTE", "OPERADOR" })
 	public List<VendaItem> listar(@PathVariable(value = "idVenda") Integer idVenda) {
 		return service.listar(idVenda);
 	}
