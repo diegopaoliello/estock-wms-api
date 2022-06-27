@@ -23,7 +23,7 @@ public class Fornecedor extends AbstractEntity {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String razaoSocial;
 
-	@Column(nullable = false, length = 500)
+	@Column(length = 500)
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String nomeFantasia;
 
