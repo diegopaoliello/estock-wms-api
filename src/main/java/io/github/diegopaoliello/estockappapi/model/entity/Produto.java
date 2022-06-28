@@ -36,7 +36,7 @@ public class Produto extends AbstractEntity {
 	private Categoria categoria;
 
 	@ManyToOne
-	@NotNull(message = "{campo.unidadeMedida.obrigatorio")
+	@NotNull(message = "{campo.unidade_medida.obrigatorio}")
 	@JoinColumn(name = "id_unidade_medida", nullable = false, foreignKey = @ForeignKey(name = "produto_unidade_medidad_fk"))
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private UnidadeMedida unidadeMedida;

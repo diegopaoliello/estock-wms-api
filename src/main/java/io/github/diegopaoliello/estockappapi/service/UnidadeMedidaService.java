@@ -41,7 +41,7 @@ public class UnidadeMedidaService extends AbstractService<UnidadeMedida, Unidade
 	private void valida(Integer id, UnidadeMedida unidadeMedida) {
 		String sigla = unidadeMedida.getSigla();
 
-		boolean exists = repository.existsByIdNotAndSigla(id == null ? 0 : id, sigla);
+		boolean exists = repository.existsByIdNotAndSiglaIgnoreCase(id == null ? 0 : id, sigla);
 
 		if (exists) {
 			throw new UniqueException(entidade);
