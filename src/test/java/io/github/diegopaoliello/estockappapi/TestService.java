@@ -22,7 +22,6 @@ public class TestService {
 	private final PedidoStatusRepository pedidoStatusRepository;
 	private final VendaStatusRepository vendaStatusRepository;
 
-	@Autowired
 	public TestService(UsuarioTipoLoginRepository tipoLoginRepository, UsuarioPerfilRepository perfilRepository,
 			UsuarioRepository usuarioRepository, PedidoStatusRepository pedidoStatusRepository,
 			VendaStatusRepository vendaStatusRepository) {
