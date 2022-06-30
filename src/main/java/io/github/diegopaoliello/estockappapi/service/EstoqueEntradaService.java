@@ -29,7 +29,7 @@ public class EstoqueEntradaService extends AbstractService<EstoqueEntrada, Estoq
 	public EstoqueEntrada salvar(EstoqueEntrada entradaEstoque) {
 		try {
 			estoqueService.entrada(entradaEstoque);
-			produtoService.atualizarPrecoMedio(entradaEstoque.getProduto());
+			produtoService.atualizarPrecoMedio(entradaEstoque);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}

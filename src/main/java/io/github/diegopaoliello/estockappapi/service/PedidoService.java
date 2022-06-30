@@ -27,7 +27,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	@Autowired
 	PedidoStatusRepository pedidoStatusRepository;
 
-	private Boolean isAprovandoPedido = false;
+	private Boolean isConcluindoPedido = false;
 
 	public PedidoService() {
 		super("Pedido de Compras");
@@ -56,7 +56,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 		repository.findById(id).map(pedido -> {
 
 			permiteAlterarStatus(pedido.getStatus(), statusAtualizado);
-			isAprovandoPedido = isAprovandoPedido(pedido.getStatus(), statusAtualizado);
+			isConcluindoPedido = isConcluindoPedido(pedido.getStatus(), statusAtualizado);
 
 			pedido = pedidoAtualizado;
 			pedido.setId(id);
@@ -64,7 +64,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 
 			pedido = repository.save(pedido);
 
-			if (isAprovandoPedido) {
+			if (isConcluindoPedido) {
 				List<PedidoItem> itensPedido = itemPedidoService.acharPorPedido(pedido);
 
 				for (PedidoItem itemPedido : itensPedido) {
@@ -84,11 +84,11 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 			PedidoStatus statusAtualizado = pedidoStatusRepository.findByCodigo(status);
 
 			permiteAlterarStatus(pedido.getStatus(), statusAtualizado);
-			isAprovandoPedido = isAprovandoPedido(pedido.getStatus(), statusAtualizado);
+			isConcluindoPedido = isConcluindoPedido(pedido.getStatus(), statusAtualizado);
 
 			super.repository.updateStatus(id, statusAtualizado);
 
-			if (isAprovandoPedido) {
+			if (isConcluindoPedido) {
 				List<PedidoItem> itensPedido = itemPedidoService.acharPorPedido(pedido);
 
 				for (PedidoItem itemPedido : itensPedido) {
@@ -100,7 +100,7 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 		}
 	}
 
-	private boolean isAprovandoPedido(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
+	private boolean isConcluindoPedido(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
 		return (statusAnterior.getCodigo().equals("APROVADO")  && statusAtualizado.getCodigo().equals("CONCLUIDO"));
 	}
 

@@ -11,7 +11,6 @@ import io.github.diegopaoliello.estockappapi.model.repository.UsuarioRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.UsuarioTipoLoginRepository;
 import io.github.diegopaoliello.estockappapi.model.repository.VendaStatusRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

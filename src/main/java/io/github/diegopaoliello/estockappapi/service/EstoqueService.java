@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class EstoqueService extends AbstractService<Estoque, EstoqueRepository> 
 		super(Estoque.class);
 	}
 
+	@Transactional
 	public Estoque entrada(EstoqueEntrada estoqueEntrada) {
 		Produto produto = estoqueEntrada.getProduto();
 		Estoque estoqueProduto = super.repository.findByProduto(produto).map(estoque -> estoque).orElse(new Estoque());

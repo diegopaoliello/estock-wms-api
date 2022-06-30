@@ -12,6 +12,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,11 +56,13 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 		super.atualizar(id, produto);
 	}
 
-	public BigDecimal calcularPrecoMedio(Produto produto) {
+	@Transactional
+	public BigDecimal calcularPrecoMedio(EstoqueEntrada entradaEstoque) {
 		Pageable pageable = PageRequest.of(0, 3, Sort.by("id").descending());
 
-		List<EstoqueEntrada> estoqueEntrada = estoqueEntradaRepository.findByProduto(produto, pageable)
-				.map(estoque -> estoque).orElse(new ArrayList<EstoqueEntrada>());
+		List<EstoqueEntrada> estoqueEntrada = estoqueEntradaRepository
+				.findByProduto(entradaEstoque.getProduto(), pageable).map(estoque -> estoque)
+				.orElse(new ArrayList<EstoqueEntrada>());
 
 		BigDecimal valorTotal = estoqueEntrada.stream().map(x -> x.getPreco().multiply(x.getQuantidade()))
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -70,20 +74,17 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 
 		if (valorTotal.compareTo(BigDecimal.ZERO) == 1 && quantidadeTotal.compareTo(BigDecimal.ZERO) == 1) {
 			precoMedio = valorTotal.divide(quantidadeTotal, 2, RoundingMode.HALF_UP);
+		} else {
+			precoMedio = entradaEstoque.getPreco();
 		}
-
 
 		return precoMedio;
 	}
 
-	public BigDecimal calcularPrecoMedio(Integer idProduto) {
-		Produto produto = super.acharPorId(idProduto);
-
-		return calcularPrecoMedio(produto);
-	}
-
-	public void atualizarPrecoMedio(Produto produto) {
-		BigDecimal precoMedio = calcularPrecoMedio(produto);
+	@Transactional
+	public void atualizarPrecoMedio(EstoqueEntrada entradaEstoque) {
+		BigDecimal precoMedio = calcularPrecoMedio(entradaEstoque);
+		Produto produto = entradaEstoque.getProduto();
 
 		produto.setPrecoMedio(precoMedio);
 
