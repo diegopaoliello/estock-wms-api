@@ -64,13 +64,17 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 				.findByProduto(entradaEstoque.getProduto(), pageable).map(estoque -> estoque)
 				.orElse(new ArrayList<EstoqueEntrada>());
 
-		BigDecimal valorTotal = estoqueEntrada.stream().map(x -> x.getPreco().multiply(x.getQuantidade()))
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		BigDecimal valorTotal = entradaEstoque.getPreco().multiply(entradaEstoque.getQuantidade());
+
+		valorTotal.add(estoqueEntrada.stream().map(x -> x.getPreco().multiply(x.getQuantidade()))
+				.reduce(BigDecimal.ZERO, BigDecimal::add));
 
 		valorTotal.add(entradaEstoque.getPreco().multiply(entradaEstoque.getQuantidade()));
 
-		BigDecimal quantidadeTotal = estoqueEntrada.stream().map(x -> x.getQuantidade()).reduce(BigDecimal.ZERO,
-				BigDecimal::add);
+		BigDecimal quantidadeTotal = entradaEstoque.getQuantidade();
+
+		quantidadeTotal
+				.add(estoqueEntrada.stream().map(x -> x.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
 
 		quantidadeTotal.add(entradaEstoque.getQuantidade());
 
