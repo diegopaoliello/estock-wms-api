@@ -67,16 +67,16 @@ public class ProdutoService extends AbstractService<Produto, ProdutoRepository> 
 		BigDecimal valorTotal = estoqueEntrada.stream().map(x -> x.getPreco().multiply(x.getQuantidade()))
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 
+		valorTotal.add(entradaEstoque.getPreco().multiply(entradaEstoque.getQuantidade()));
+
 		BigDecimal quantidadeTotal = estoqueEntrada.stream().map(x -> x.getQuantidade()).reduce(BigDecimal.ZERO,
 				BigDecimal::add);
 
+		quantidadeTotal.add(entradaEstoque.getQuantidade());
+
 		BigDecimal precoMedio = BigDecimal.ZERO;
 
-		if (valorTotal.compareTo(BigDecimal.ZERO) == 1 && quantidadeTotal.compareTo(BigDecimal.ZERO) == 1) {
-			precoMedio = valorTotal.divide(quantidadeTotal, 2, RoundingMode.HALF_UP);
-		} else {
-			precoMedio = entradaEstoque.getPreco();
-		}
+		precoMedio = valorTotal.divide(quantidadeTotal, 2, RoundingMode.HALF_UP);
 
 		return precoMedio;
 	}
