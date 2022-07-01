@@ -1,6 +1,5 @@
 package io.github.diegopaoliello.estockappapi.service;
 
-import io.github.diegopaoliello.estockappapi.exception.PedidoStatusAtualException;
 import io.github.diegopaoliello.estockappapi.exception.PedidoStatusException;
 import io.github.diegopaoliello.estockappapi.model.entity.Pedido;
 import io.github.diegopaoliello.estockappapi.model.entity.PedidoItem;
@@ -101,25 +100,22 @@ public class PedidoService extends AbstractService<Pedido, PedidoRepository> {
 	}
 
 	private boolean isConcluindoPedido(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
-		return (statusAnterior.getCodigo().equals("APROVADO")  && statusAtualizado.getCodigo().equals("CONCLUIDO"));
+		return (statusAnterior.getCodigo().equals("APROVADO") && statusAtualizado.getCodigo().equals("CONCLUIDO"));
 	}
 
 	private void permiteAlterarStatus(PedidoStatus statusAnterior, PedidoStatus statusAtualizado) {
-		if (!statusAtualizado.getCodigo().equals("ABERTO")
-				&& statusAtualizado.getCodigo().equals(statusAnterior.getCodigo())) {
-			throw new PedidoStatusAtualException(statusAtualizado.getDescricao());
-		}
+		if (!statusAnterior.equals(statusAtualizado)) {
+			if (statusAtualizado.getCodigo().equals("APROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
+				throw new PedidoStatusException(statusAtualizado.getAcao());
+			}
 
-		if (statusAtualizado.getCodigo().equals("APROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
-			throw new PedidoStatusException(statusAtualizado.getAcao());
-		}
+			if (statusAtualizado.getCodigo().equals("REPROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
+				throw new PedidoStatusException(statusAtualizado.getAcao());
+			}
 
-		if (statusAtualizado.getCodigo().equals("REPROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
-			throw new PedidoStatusException(statusAtualizado.getAcao());
-		}
-
-		if (statusAtualizado.getCodigo().equals("CONCLUIDO") && !statusAnterior.getCodigo().equals("APROVADO")) {
-			throw new PedidoStatusException(statusAtualizado.getAcao());
+			if (statusAtualizado.getCodigo().equals("CONCLUIDO") && !statusAnterior.getCodigo().equals("APROVADO")) {
+				throw new PedidoStatusException(statusAtualizado.getAcao());
+			}
 		}
 	}
 }

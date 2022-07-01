@@ -1,6 +1,5 @@
 package io.github.diegopaoliello.estockappapi.service;
 
-import io.github.diegopaoliello.estockappapi.exception.VendaStatusAtualException;
 import io.github.diegopaoliello.estockappapi.exception.VendaStatusException;
 import io.github.diegopaoliello.estockappapi.model.entity.Venda;
 import io.github.diegopaoliello.estockappapi.model.entity.VendaItem;
@@ -105,21 +104,18 @@ public class VendaService extends AbstractService<Venda, VendaRepository> {
 	}
 
 	private void permiteAlterarStatus(VendaStatus statusAnterior, VendaStatus statusAtualizado) {
-		if (!statusAtualizado.getCodigo().equals("ABERTO")
-				&& statusAtualizado.getCodigo().equals(statusAnterior.getCodigo())) {
-			throw new VendaStatusAtualException(statusAtualizado.getDescricao());
-		}
+		if (!statusAnterior.equals(statusAtualizado)) {
+			if (statusAtualizado.getCodigo().equals("APROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
+				throw new VendaStatusException(statusAtualizado.getAcao());
+			}
 
-		if (statusAtualizado.getCodigo().equals("APROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
-			throw new VendaStatusException(statusAtualizado.getAcao());
-		}
+			if (statusAtualizado.getCodigo().equals("REPROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
+				throw new VendaStatusException(statusAtualizado.getAcao());
+			}
 
-		if (statusAtualizado.getCodigo().equals("REPROVADO") && !statusAnterior.getCodigo().equals("ABERTO")) {
-			throw new VendaStatusException(statusAtualizado.getAcao());
-		}
-
-		if (statusAtualizado.getCodigo().equals("CONCLUIDO") && !statusAnterior.getCodigo().equals("APROVADO")) {
-			throw new VendaStatusException(statusAtualizado.getAcao());
+			if (statusAtualizado.getCodigo().equals("CONCLUIDO") && !statusAnterior.getCodigo().equals("APROVADO")) {
+				throw new VendaStatusException(statusAtualizado.getAcao());
+			}
 		}
 	}
 }
