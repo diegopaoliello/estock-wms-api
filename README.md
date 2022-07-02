@@ -31,3 +31,7 @@ https://api-estock.herokuapp.com/api/oauth/token
 1. **username:** user
 2. **password:** 123
 3. **grant_type:** password
+
+**Coleção de URLs da API (Postman)**
+
+Coleção de URLs da API. O arquivo [eStock.postman_collection.json](https://github.com/diegopaoliello/estock-wms-api/blob/main/src/main/resources/eStock.postman_collection.json) deve ser importado pelo [Postman](https://www.postman.com/downloads/).
