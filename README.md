@@ -5,14 +5,19 @@
 - Criar usuário: 
 
 **Tipo:** POST 
-https://api-estock.herokuapp.com/api/usuarios
+https://api-estock.herokuapp.com/api/login
 
 **Body**: JSON
 
 ```json
 {
-    "username": "user@estock.com",
-    "password": 123
+    "nome": "estock",
+    "sobrenome": "app",
+    "email": "user@estock.com",
+    "password": "123",
+    "tipoLogin": {
+        "id": 1
+    }
 }
 ````
 
@@ -23,12 +28,13 @@ https://api-estock.herokuapp.com/api/oauth/token
 
 **Authorization**
 
-1. **User:** estock-app
-2. **Password:** #estock2022
+1. **Tipo:** Basic Auth
+2. **User:** estock-app
+3. **Password:** #estock2022
 
 **Body**: x-www-form-urlencoded
 
-1. **username:** user
+1. **username:** user@estock.com
 2. **password:** 123
 3. **grant_type:** password
 
