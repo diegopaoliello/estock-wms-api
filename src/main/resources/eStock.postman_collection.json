@@ -1,0 +1,2326 @@
+{
+	"info": {
+		"_postman_id": "fd2e134b-bd60-40a3-8001-320de8abb4a6",
+		"name": "eStock",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7519088"
+	},
+	"item": [
+		{
+			"name": "Autenticacao",
+			"item": [
+				{
+					"name": "Autenticar do usuário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"console.log(jsonData.access_token);\r",
+									"pm.environment.set(\"token\", jsonData.access_token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "#estock2022",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "estock-app",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "user@estock.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/oauth/token",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Inserir login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"estock\",\r\n    \"sobrenome\": \"app\",\r\n    \"email\": \"user@estock.com\",\r\n    \"password\": \"123\",\r\n    \"tipoLogin\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/login",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Checar login existente",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "userName",
+									"value": "diego",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/api/login/usuario@teste.com",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"login",
+								"usuario@teste.com"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "fg",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cadastros",
+			"item": [
+				{
+					"name": "Unidade de medida",
+					"item": [
+						{
+							"name": "Inserir unidade de medida do produto",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descricao\": \"Kilo\",\r\n    \"sigla\": \"KG\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/unidades-medida",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"unidades-medida"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editar unidade de medida do produto",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descricao\": \"Kilo\",\r\n    \"sigla\": \"KG\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/unidades-medida/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"unidades-medida",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Listar unidades de medida do produto",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/unidades-medida/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"unidades-medida",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deletar unidade de medida do produto",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/unidades-medida/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"unidades-medida",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar unidade de medida do produto",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/unidades-medida/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"unidades-medida",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Categoria",
+					"item": [
+						{
+							"name": "Inserir categoria do produto",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descricao\": \"Alimento\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/categorias/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"categorias",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editar categoria do produto",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descricao\": \"Alimento\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/categorias/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"categorias",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Listar categorias do produto",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/categorias/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"categorias",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deletar categoria do produto",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/categorias/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"categorias",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar categoria do produto",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/categorias/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"categorias",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Produto",
+					"item": [
+						{
+							"name": "Inserir produto",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descricao\": \"Produto teste\",\r\n    \"codigo\": \"PRD-TST\",    \r\n    \"unidadeMedida\": {\r\n        \"id\": 1\r\n    },\r\n    \"categoria\": {\r\n        \"id\": 1\r\n    },\r\n    \"quantidadeMinima\": 0,\r\n    \"quantidadeMaxima\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/produtos/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"produtos",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editar produto",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descricao\": \"Produto teste\",\r\n    \"codigo\": \"PRD-TST\",    \r\n    \"unidadeMedida\": {\r\n        \"id\": 1\r\n    },\r\n    \"categoria\": {\r\n        \"id\": 1\r\n    },\r\n    \"quantidadeMinima\": 0,\r\n    \"quantidadeMaxima\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/produtos/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"produtos",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Listar produtos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/produtos/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"produtos",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deletar produto",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/produto/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"produto",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar produto",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/produtos/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"produtos",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Fornecedor",
+					"item": [
+						{
+							"name": "Inserir fornecedor",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"razaoSocial\": \"Fornecedor Teste\",\r\n    \"nomeFantasia\": \"Forncedor\",\r\n    \"cnpj\": \"74442484000831\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/fornecedores/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"fornecedores",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editar fornecedor",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"razaoSocial\": \"Fornecedor Teste\",\r\n    \"nomeFantasia\": \"Forncedor\",\r\n    \"cnpj\": \"74442484000831\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/fornecedores/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"fornecedores",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Listar fornecedores",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/fornecedores/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"fornecedores",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar fornecedor",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/fornecedores/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"fornecedores",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deletar fornecedor",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/fornecedores/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"fornecedores",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cliente",
+					"item": [
+						{
+							"name": "Inserir cliente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"razaoSocial\": \"Cliente Teste\",\r\n    \"nomeFantasia\": \"Cliente\",\r\n    \"cnpj\": \"02171490000114\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/clientes",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"clientes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editar cliente",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"razaoSocial\": \"Cliente Teste\",\r\n    \"nomeFantasia\": \"Cliente\",\r\n    \"cnpj\": \"02171490000114\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/clientes/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"clientes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Listar clientes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/clientes",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"clientes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar cliente",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Paulo\",\r\n    \"cpf\": \"482.501.900-50\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/clientes/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"clientes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deletar cliente",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/clientes/1",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"clientes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Usuario",
+					"item": [
+						{
+							"name": "Editar usuario",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Diego\",\r\n    \"sobrenome\": \"Paoliello\",\r\n    \"email\": \"diegopaoliello@teste.com\",\r\n    \"password\": \"123\",\r\n    \"perfil\": {\r\n        \"id\": 1\r\n    },\r\n    \"tipoLogin\": {\r\n        \"id\": 1\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/usuarios/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"usuarios",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar usuario",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/api/usuarios/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"usuarios",
+										""
+									],
+									"query": [
+										{
+											"key": "username",
+											"value": "fg",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Status do pedido",
+					"item": [
+						{
+							"name": "Listar status do pedido",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/pedidos-status/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"pedidos-status",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Status da venda",
+					"item": [
+						{
+							"name": "Listar status da venda",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/vendas-status/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"vendas-status",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Perfis do usuário",
+					"item": [
+						{
+							"name": "Listar perfis do usuário",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/perfis/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"perfis",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tipos de login do usuário",
+					"item": [
+						{
+							"name": "Listar tipos de login do usuário",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/api/tipos-login/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"api",
+										"tipos-login",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Gestão de Estoque",
+			"item": [
+				{
+					"name": "Listar produtos do  estoque",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/estoques?idProduto=1&quantidade=1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"estoques"
+							],
+							"query": [
+								{
+									"key": "idProduto",
+									"value": "1"
+								},
+								{
+									"key": "quantidade",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Inserir entrada de estoque",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"preco\": \"45\",\r\n    \"quantidade\": \"100\",\r\n    \"produto\": {\r\n    \"id\": 1,\r\n    \"descricao\": \"Produto teste\",\r\n    \"codigo\": \"PRD-TST\",\r\n    \"categoria\": {\r\n        \"id\": 1\r\n    },\r\n    \"unidadeMedida\": {\r\n        \"id\": 1\r\n    }\r\n    },\r\n    \"justificativa\": \"inventario\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/entradas-estoque",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"entradas-estoque"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar entradas de estoque",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/entradas-estoque/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"entradas-estoque",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar saídas de estoque",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/saidas-estoque/",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"saidas-estoque",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movimentação Estoque",
+			"item": [
+				{
+					"name": "Entrada",
+					"item": [
+						{
+							"name": "Pedido",
+							"item": [
+								{
+									"name": "Itens do Pedido",
+									"item": [
+										{
+											"name": "Inserir item do pedido",
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"produto\": {\r\n        \"id\": 1\r\n    },\r\n    \"preco\": 2.5,\r\n    \"desconto\": 0,\r\n    \"quantidade\": 0\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{server}}/api/pedidos/1/itens/",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"pedidos",
+														"1",
+														"itens",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Editar item do pedido",
+											"request": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"quantidade\": 10,\r\n    \"preco\": 10,\r\n    \"desconto\": 0,\r\n    \"produto\": {\r\n        \"id\": 1\r\n    }\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{server}}/api/pedidos/1/itens/1",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"pedidos",
+														"1",
+														"itens",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Listar itens do pedido",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "GET",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{server}}/api/pedidos/1/itens/",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"pedidos",
+														"1",
+														"itens",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Deletar item do pedido",
+											"request": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{server}}/api/pedidos/1/itens/1",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"pedidos",
+														"1",
+														"itens",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Buscar item do pedido",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{server}}/api/pedidos/1/itens/1",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"pedidos",
+														"1",
+														"itens",
+														"1"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Inserir pedido",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"fornecedor\": {\r\n        \"id\": 1\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{server}}/api/pedidos",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"pedidos"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Editar pedido",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"status\": {\r\n        \"id\": 1,\r\n        \"codigo\": \"ABERTO\"\r\n    },\r\n    \"fornecedor\": {\r\n        \"id\": 2\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{server}}/api/pedidos/2",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"pedidos",
+												"2"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Listar pedidos",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{server}}/api/pedidos/",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"pedidos",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Deletar pedido",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{server}}/api/produto/1",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"produto",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Buscar pedido",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{server}}/api/pedidos/1",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"pedidos",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Aprovar",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{server}}/api/pedidos/1/aprovar",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"pedidos",
+												"1",
+												"aprovar"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Reprovar",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{server}}/api/pedidos/1/reprovar",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"pedidos",
+												"1",
+												"reprovar"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Concluir",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{server_url}}/api/pedidos/1/concluir",
+											"host": [
+												"{{server_url}}"
+											],
+											"path": [
+												"api",
+												"pedidos",
+												"1",
+												"concluir"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Atualizar Status",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{server_url}}/api/pedido/57/concluido",
+											"host": [
+												"{{server_url}}"
+											],
+											"path": [
+												"api",
+												"pedido",
+												"57",
+												"concluido"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Saida",
+					"item": [
+						{
+							"name": "Venda",
+							"item": [
+								{
+									"name": "Itens da Venda",
+									"item": [
+										{
+											"name": "Inserir item da venda",
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"produto\": {\r\n        \"id\": 1\r\n    },\r\n    \"preco\": 1,\r\n    \"desconto\": 0,\r\n    \"quantidade\": 2\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{server}}/api/vendas/1/itens/",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"vendas",
+														"1",
+														"itens",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Editar item da venda",
+											"request": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"quantidade\": 2.00,\r\n    \"preco\": 1.00,\r\n    \"desconto\": 0.00,\r\n    \"valorFinal\": 1.00,\r\n    \"produto\": {\r\n        \"id\": 1\r\n    }\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{server}}/api/pedidos/1/itens/1",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"pedidos",
+														"1",
+														"itens",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Listar itens da venda",
+											"protocolProfileBehavior": {
+												"disableBodyPruning": true
+											},
+											"request": {
+												"auth": {
+													"type": "bearer",
+													"bearer": [
+														{
+															"key": "token",
+															"value": "{{token}}",
+															"type": "string"
+														}
+													]
+												},
+												"method": "GET",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{server}}/api/vendas/1/itens/",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"vendas",
+														"1",
+														"itens",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Deletar item da venda",
+											"request": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{server}}/api/vendas/1/itens/1",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"vendas",
+														"1",
+														"itens",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Buscar item da venda",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{server}}/api/vendas/1/itens/1",
+													"host": [
+														"{{server}}"
+													],
+													"path": [
+														"api",
+														"vendas",
+														"1",
+														"itens",
+														"1"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Inserir venda",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"cliente\": {\r\n        \"id\": 1\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{server}}/api/vendas",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"vendas"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Editar venda",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"status\": {\r\n        \"id\": 1,\r\n        \"codigo\": \"ABERTO\"\r\n    },\r\n    \"cliente\": {\r\n        \"id\": 1\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{server}}/api/vendas/1",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"vendas",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Listar vendas",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{server}}/api/vendas/",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"vendas",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Deletar venda",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{server}}/api/vendas/1",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"vendas",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Buscar venda",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{server}}/api/vendas/1",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"vendas",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Aprovar",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{server}}/api/vendas/1/aprovar",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"vendas",
+												"1",
+												"aprovar"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Reprovar",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{server}}/api/pedidos/1/reprovar",
+											"host": [
+												"{{server}}"
+											],
+											"path": [
+												"api",
+												"pedidos",
+												"1",
+												"reprovar"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Concluir",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{server_url}}/api/pedidos/1/concluir",
+											"host": [
+												"{{server_url}}"
+											],
+											"path": [
+												"api",
+												"pedidos",
+												"1",
+												"concluir"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Atualizar Status",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{server_url}}/api/pedido/57/concluido",
+											"host": [
+												"{{server_url}}"
+											],
+											"path": [
+												"api",
+												"pedido",
+												"57",
+												"concluido"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
