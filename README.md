@@ -29,8 +29,8 @@ https://api-estock.herokuapp.com/api/oauth/token
 **Authorization**
 
 1. **Tipo:** Basic Auth
-2. **User:** estock-app
-3. **Password:** #estock2022
+2. **Client ID:** estock-app
+3. **Secret:** #estock2022
 
 **Body**: x-www-form-urlencoded
 
